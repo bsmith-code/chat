@@ -1,6 +1,7 @@
 module.exports = {
   "extends": [
       "airbnb",
+      "airbnb/hooks",
       "prettier",
       "prettier/react"
   ],
@@ -11,6 +12,7 @@ module.exports = {
   "parser": "babel-eslint",
   "rules": {
       "semi": [2, "never"],
+      "no-param-reassign": "off",
       "array-callback-return": "off",
       "consistent-return": "off",
       "import/no-unresolved": "off",
@@ -19,6 +21,7 @@ module.exports = {
       "react/no-unescaped-entities": "off",
       "react/jsx-props-no-spreading": "off",
       "react/prop-types": "off",
+      "import/prefer-default-export": "off",
       "jsx-a11y/label-has-associated-control": "off",
       "react/jsx-filename-extension": [
           1,
