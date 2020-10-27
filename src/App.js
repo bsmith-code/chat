@@ -13,17 +13,17 @@ const App = () => {
   const currentUser = useSelector(state => state.auth.currentUser)
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    const getUserStatus = async () => {
-      const accessToken = await getAccessToken()
-      if (accessToken) {
-        setIsLoading(true)
-        await dispatch(actions.auth.getUserStatus())
-        setIsLoading(false)
-      }
-    }
-    getUserStatus()
-  })
+  // useEffect(() => {
+  //   const getUserStatus = async () => {
+  //     const accessToken = await getAccessToken()
+  //     if (accessToken) {
+  //       setIsLoading(true)
+  //       await dispatch(actions.auth.getUserStatus())
+  //       setIsLoading(false)
+  //     }
+  //   }
+  //   getUserStatus()
+  // })
 
   console.log(currentUser)
 
