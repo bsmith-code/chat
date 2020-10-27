@@ -14,9 +14,9 @@ const fetchUserStatus = async () => {
 const loginUser = async ({ username, password }) => {
   try {
     const route = `/auth/login`
-    const user = await API.post(route, { username, password })
+    const { data } = await API.post(route, { username, password })
 
-    return user
+    return data
   } catch (error) {
     console.log(error)
   }

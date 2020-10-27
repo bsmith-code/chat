@@ -4,7 +4,7 @@ const initialState = {
 
 const authReducers = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_USER_STATUS':
+    case 'SET_CURRENT_USER':
       return {
         ...state,
         currentUser: action.payload.user,

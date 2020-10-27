@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { Provider, useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import Loader from 'react-loaders'
 import { getAccessToken } from './helpers'
 import { Login, Register, Dashboard } from './views'
 import GuardedRoute from './components/GuardedRoute'
 import Styles from './styles'
-import actions from './redux/actions'
-import store from './redux'
+import actions from './store/actions'
 
-const App = async () => {
+const App = () => {
   const [isLoading, setIsLoading] = useState(false)
-  const currentUser = useSelector(state => state.currentUser)
+  const currentUser = useSelector(state => state.auth.currentUser)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -26,20 +25,21 @@ const App = async () => {
     getUserStatus()
   })
 
+  console.log(currentUser)
+
   return isLoading ? (
-    'test'
+    <Loader type="ball-grid-pulse" />
   ) : (
-    // <Loader type="ball-grid-pulse" />
-    <Provider store={store}>
+    <>
       <Styles />
       <Router>
         <Switch>
-          <GuardedRoute exact path="/" component={Dashboard} currentUser={currentUser} />
+          <GuardedRoute exact path="/" component={Dashboard} isAuthenticated={!!currentUser} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
         </Switch>
       </Router>
-    </Provider>
+    </>
   )
 }
 
