@@ -19,6 +19,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
     'react-hooks/exhaustive-deps': 'off',
+    'no-underscore-dangle': 'off',
     'react/jsx-filename-extension': [
       1,
       {

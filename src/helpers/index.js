@@ -5,4 +5,8 @@ const getAccessToken = async () => {
   return accessToken
 }
 
-export { getAccessToken }
+const handleError = error => {
+  return error.response.data.message
+}
+
+export { getAccessToken, handleError }

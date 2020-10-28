@@ -1,4 +1,5 @@
 import API from '../../clients'
+import { handleError } from '../../helpers'
 
 const fetchUserStatus = async () => {
   try {
@@ -7,7 +8,7 @@ const fetchUserStatus = async () => {
 
     return data
   } catch (error) {
-    console.log(error)
+    throw handleError(error)
   }
 }
 
@@ -18,7 +19,7 @@ const loginUser = async ({ username, password }) => {
 
     return data
   } catch (error) {
-    console.log(error)
+    throw handleError(error)
   }
 }
 
@@ -29,7 +30,7 @@ const logoutUser = async () => {
 
     return user
   } catch (error) {
-    console.log(error)
+    throw handleError(error)
   }
 }
 

@@ -2,12 +2,12 @@ const initialState = {
   currentUser: null,
 }
 
-const authReducers = (state = initialState, action) => {
-  switch (action.type) {
+const authReducers = (state = initialState, { type, payload }) => {
+  switch (type) {
     case 'SET_CURRENT_USER':
       return {
         ...state,
-        currentUser: action.payload.user,
+        currentUser: payload.user,
       }
 
     default:

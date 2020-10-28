@@ -1,5 +1,5 @@
-const setAppNotification = msgObj => dispatch => {
-  dispatch({ type: 'SET_APP_NOTIFICATION', payload: { msgObj } })
+const setAppNotification = data => dispatch => {
+  dispatch({ type: 'SET_APP_NOTIFICATION', payload: { data } })
 }
 
 const setIsLoading = isLoading => dispatch => {

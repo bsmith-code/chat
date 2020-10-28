@@ -1,6 +1,6 @@
 const initialState = {
   isLoading: false,
-  appNotificaion: {},
+  appNotification: null,
 }
 
 const appReducers = (state = initialState, { type, payload }) => {
@@ -8,7 +8,7 @@ const appReducers = (state = initialState, { type, payload }) => {
     case 'SET_APP_NOTIFICATION':
       return {
         ...state,
-        appNotificaion: payload.msgObj,
+        appNotification: payload.data,
       }
     case 'SET_APP_IS_LOADING':
       return {

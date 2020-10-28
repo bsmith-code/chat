@@ -3,28 +3,44 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import Loader from 'react-loaders'
 import styled from 'styled-components'
+import { useToasts } from 'react-toast-notifications'
 import { getAccessToken } from './helpers'
 import { Login, Register, Dashboard } from './views'
-import GuardedRoute from './components/GuardedRoute'
+import GuardedRoute from './components/layout/GuardedRoute'
 import Styles from './styles'
 import actions from './store/actions'
 
 const App = () => {
+  const { addToast } = useToasts()
+  const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(true)
   const currentUser = useSelector(state => state.auth.currentUser)
-  const dispatch = useDispatch()
+  const appNotification = useSelector(state => state.app.appNotification)
 
   useEffect(() => {
     const getUserStatus = async () => {
+      setIsLoading(true)
       const accessToken = await getAccessToken()
       if (accessToken) {
-        setIsLoading(true)
         await dispatch(actions.auth.getUserStatus())
-        setIsLoading(false)
       }
+      setIsLoading(false)
     }
     getUserStatus()
   }, [])
+
+  useEffect(() => {
+    if (appNotification) {
+      const { message, type } = appNotification
+      addToast(message, {
+        appearance: type,
+        autoDismiss: true,
+      })
+      return () => {
+        dispatch(actions.app.setAppNotification(null))
+      }
+    }
+  }, [appNotification])
 
   return (
     <>

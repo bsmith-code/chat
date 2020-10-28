@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Loader from 'react-loaders'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
@@ -8,6 +8,7 @@ import actions from '../../store/actions'
 const LoginForm = () => {
   const history = useHistory()
   const dispatch = useDispatch()
+  const currentUser = useSelector(state => state.auth.currentUser)
   const [isLoading, setIsLoading] = useState(false)
   const [fields, updateFields] = useState([
     {
@@ -28,6 +29,12 @@ const LoginForm = () => {
     },
   ])
 
+  useEffect(() => {
+    if (currentUser) {
+      history.push('/')
+    }
+  }, [currentUser])
+
   const handleInputChange = idx => e => {
     const newFields = [...fields]
     newFields[idx] = {
@@ -44,7 +51,6 @@ const LoginForm = () => {
       formData[field.name] = field.value
     })
     await dispatch(actions.auth.login(formData))
-    history.push('/')
     setIsLoading(false)
   }
 
