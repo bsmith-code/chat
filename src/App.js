@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import Loader from 'react-loaders'
-import styled from 'styled-components'
 import { useToasts } from 'react-toast-notifications'
 import { getAccessToken } from './helpers'
 import { Login, Register, Dashboard } from './views'
 import GuardedRoute from './components/layout/GuardedRoute'
+import PageLoader from './components/loaders/PageLoader'
 import Styles from './styles'
 import actions from './store/actions'
 
@@ -46,9 +45,7 @@ const App = () => {
     <>
       <Styles />
       {isLoading ? (
-        <LoaderWrapper>
-          <Loader type="ball-grid-pulse" />
-        </LoaderWrapper>
+        <PageLoader />
       ) : (
         <Router>
           <Switch>
@@ -61,13 +58,5 @@ const App = () => {
     </>
   )
 }
-
-const LoaderWrapper = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
 
 export default App
