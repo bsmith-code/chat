@@ -18,7 +18,17 @@ const login = data => async dispatch => {
   }
 }
 
+const logout = () => async dispatch => {
+  try {
+    await logoutUser()
+    dispatch({ type: 'SET_CURRENT_USER', payload: {} })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export default {
   login,
+  logout,
   getUserStatus,
 }

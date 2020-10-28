@@ -3,9 +3,9 @@ import API from '../../clients'
 const fetchUserStatus = async () => {
   try {
     const route = `/auth/status`
-    const user = await API.get(route)
+    const { data } = await API.get(route)
 
-    return user
+    return data
   } catch (error) {
     console.log(error)
   }

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import LoginForm from '../components/forms/LoginForm'
 
@@ -8,6 +9,10 @@ const Login = () => {
       <LoginSection>
         <LoginTitle>Well Chat.</LoginTitle>
         <LoginForm />
+        <RegisterWrapper>
+          <RegisterCopy>Don't have an account?</RegisterCopy>
+          <RegisterLink to="register">Register Now</RegisterLink>
+        </RegisterWrapper>
       </LoginSection>
     </LoginMain>
   )
@@ -31,5 +36,16 @@ const LoginTitle = styled.h1`
   color: var(--blue);
   margin: 0 0 60px 0;
 `
+const RegisterWrapper = styled.div`
+  margin: 40px 0 0 0;
+  font-size: 13px;
+`
 
+const RegisterCopy = styled.p`
+  margin: 0;
+`
+const RegisterLink = styled(Link)`
+  color: var(--blue);
+  font-weight: 600;
+`
 export default Login
