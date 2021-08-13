@@ -7,10 +7,9 @@ const API = axios.create({
   headers: {
     Accept: 'application/json;',
     common: {
-      'Content-Type': 'application/json; charset=utf-8',
-    },
-  },
-  emulateJSON: true,
+      'Content-Type': 'application/json; charset=utf-8'
+    }
+  }
 })
 
 API.interceptors.request.use(async config => {

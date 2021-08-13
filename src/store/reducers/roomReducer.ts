@@ -1,13 +1,13 @@
 const initialState = {
-  rooms: [],
+  rooms: []
 }
 
-const roomReducers = (state = initialState, { type, payload }) => {
+const roomReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case 'SET_ROOMS':
       return {
         ...state,
-        rooms: payload.rooms,
+        rooms: payload.rooms
       }
 
     default:
@@ -15,4 +15,4 @@ const roomReducers = (state = initialState, { type, payload }) => {
   }
 }
 
-export default roomReducers
+export default roomReducer

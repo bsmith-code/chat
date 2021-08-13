@@ -5,7 +5,7 @@ import roomActions from './roomActions'
 const allActions = {
   app: appActions,
   auth: authActions,
-  room: roomActions,
+  room: roomActions
 }
 
 export default allActions

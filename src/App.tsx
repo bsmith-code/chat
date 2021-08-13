@@ -27,10 +27,10 @@ const GuardedRoute = ({
 }) => {
   return (
     <Route
-      exact={exact}
       path={path}
-      render={props =>
-        isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
+      exact={exact}
+      render={() =>
+        isAuthenticated ? <Component /> : <Redirect to="/login" />
       }
     />
   )
@@ -68,7 +68,7 @@ const App = () => {
               isAuthenticated={!!currentUser}
             />
             <Route path="/login" component={ViewLogin} />
-            {/* <Route path="/register" component={ViewRegister} /> */}
+            <Route path="/register" component={ViewRegister} />
           </Switch>
         </Router>
       )}

@@ -1,23 +1,23 @@
 const initialState = {
   isLoading: false,
-  appNotification: null,
+  appNotification: null
 }
 
-const appReducers = (state = initialState, { type, payload }) => {
+const appReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case 'SET_APP_NOTIFICATION':
       return {
         ...state,
-        appNotification: payload.data,
+        appNotification: payload.data
       }
     case 'SET_APP_IS_LOADING':
       return {
         ...state,
-        isLoading: payload.isLoading,
+        isLoading: payload.isLoading
       }
     default:
       return state
   }
 }
 
-export default appReducers
+export default appReducer

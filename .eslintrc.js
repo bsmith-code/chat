@@ -29,6 +29,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 0,
     'react/jsx-props-no-spreading': 0,
     'import/prefer-default-export': 0,
+    '@typescript-eslint/no-var-requires': 0,
     'jsx-a11y/label-has-associated-control': 0
   }
 }
