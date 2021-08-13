@@ -1,40 +1,34 @@
 module.exports = {
-  extends: ['airbnb', 'airbnb/hooks', 'prettier', 'prettier/react'],
-  env: {
-    browser: true,
-    node: true,
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 2018,
+    sourceType: 'module'
   },
-  parser: 'babel-eslint',
+  plugins: ['@typescript-eslint', 'react-hooks'],
+  extends: [
+    'plugin:react/recommended',
+    'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/recommended'
+  ],
   rules: {
-    semi: [2, 'never'],
-    'no-param-reassign': 'off',
-    'array-callback-return': 'off',
-    'consistent-return': 'off',
-    'import/no-unresolved': 'off',
-    'react/forbid-prop-types': 'off',
-    'react/no-array-index-key': 'off',
-    'react/no-unescaped-entities': 'off',
-    'react/jsx-props-no-spreading': 'off',
-    'react/prop-types': 'off',
-    'import/prefer-default-export': 'off',
-    'jsx-a11y/label-has-associated-control': 'off',
-    'react-hooks/exhaustive-deps': 'off',
-    'no-underscore-dangle': 'off',
     'react/jsx-filename-extension': [
-      1,
-      {
-        extensions: ['.js', '.jsx'],
-      },
+      2,
+      { extensions: ['.js', '.jsx', '.ts', '.tsx'] }
     ],
-    'prettier/prettier': [
-      'error',
-      {
-        trailingComma: 'es5',
-        singleQuote: true,
-        printWidth: 100,
-        semi: false,
-      },
-    ],
-  },
-  plugins: ['prettier'],
+    'react/prop-types': 0,
+    'import/extensions': 0,
+    'no-param-reassign': 0,
+    'consistent-return': 0,
+    'import/no-unresolved': 0,
+    'no-underscore-dangle': 0,
+    'array-callback-return': 0,
+    'react/forbid-prop-types': 0,
+    'react/react-in-jsx-scope': 0,
+    'react/no-array-index-key': 0,
+    'react/no-unescaped-entities': 0,
+    'react-hooks/exhaustive-deps': 0,
+    'react/jsx-props-no-spreading': 0,
+    'import/prefer-default-export': 0,
+    'jsx-a11y/label-has-associated-control': 0
+  }
 }

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import Rooms from '../components/dashboard/Rooms'
-import Messages from '../components/dashboard/Messages'
-import PageLoader from '../components/loaders/PageLoader'
+import LoaderPage from './LoaderPage'
+import Rooms from './Rooms'
+import Messages from './Messages'
 import actions from '../store/actions'
 
 const Dashboard = () => {
@@ -21,7 +21,7 @@ const Dashboard = () => {
   }, [])
 
   return isLoading ? (
-    <PageLoader />
+    <LoaderPage />
   ) : (
     <DashboardMain>
       <DashboardRooms>
@@ -41,6 +41,7 @@ const DashboardMain = styled.main`
 const DashboardRooms = styled.section`
   height: 100%;
   width: 450px;
+  background: var(--light-gray);
 `
 const DashboardMessages = styled.section`
   height: 100%;

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const PageLoader = () => {
   return (
     <LoaderWrapper>
-      <Loader type="ball-grid-pulse" />
+      <Loader type="ball-grid-pulse" active />
     </LoaderWrapper>
   )
 }
@@ -17,4 +17,5 @@ const LoaderWrapper = styled.div`
   align-items: center;
   justify-content: center;
 `
+
 export default PageLoader

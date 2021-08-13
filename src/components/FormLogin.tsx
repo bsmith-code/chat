@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Loader from 'react-loaders'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
-import actions from '../../store/actions'
+import actions from '../store/actions'
 
 const LoginForm = () => {
   const history = useHistory()
@@ -17,7 +17,7 @@ const LoginForm = () => {
       type: 'text',
       value: '',
       required: true,
-      errors: [],
+      errors: []
     },
     {
       name: 'password',
@@ -25,8 +25,8 @@ const LoginForm = () => {
       type: 'password',
       value: '',
       required: true,
-      errors: [],
-    },
+      errors: []
+    }
   ])
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const LoginForm = () => {
     const newFields = [...fields]
     newFields[idx] = {
       ...newFields[idx],
-      value: e.target.value,
+      value: e.target.value
     }
     updateFields(newFields)
   }
