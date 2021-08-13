@@ -1,23 +1,25 @@
-const initialState = {
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+interface IAppState {
+  isLoading: boolean
+  appNotification: string
+}
+const initialState: IAppState = {
   isLoading: false,
-  appNotification: null
+  appNotification: ''
 }
 
-const appReducer = (state = initialState, { type, payload }) => {
-  switch (type) {
-    case 'SET_APP_NOTIFICATION':
-      return {
-        ...state,
-        appNotification: payload.data
-      }
-    case 'SET_APP_IS_LOADING':
-      return {
-        ...state,
-        isLoading: payload.isLoading
-      }
-    default:
-      return state
+const appSlice = createSlice({
+  name: 'app',
+  initialState,
+  reducers: {
+    setAppNotfication(state, action: PayloadAction<string>) {
+      state.appNotification = action.payload
+    },
+    setAppIsLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload
+    }
   }
-}
+})
 
-export default appReducer
+export const { setAppNotfication, setAppIsLoading } = appSlice.actions
+export default appSlice.reducer
