@@ -7,7 +7,7 @@ import {
   BrowserRouter as Router
 } from 'react-router-dom'
 import Styles from './styles'
-import actions from './store/actions'
+import { getUserStatus } from './store/reducers/authReducer'
 import { getAccessToken } from './helpers'
 import LoaderPage from './components/LoaderPage'
 import ViewLogin from './components/ViewLogin'
@@ -36,21 +36,23 @@ const GuardedRoute = ({
   )
 }
 
-const App = () => {
+const App = (): JSX.Element => {
   const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(true)
-  const currentUser = useSelector(state => state.auth.currentUser)
+  const { data: authenticatedUser } = useSelector(
+    (state: any) => state.auth.authenticatedUser
+  )
 
   useEffect(() => {
-    const getUserStatus = async () => {
+    const onCreate = async () => {
       setIsLoading(true)
       const accessToken = await getAccessToken()
       if (accessToken) {
-        await dispatch(actions.auth.getUserStatus())
+        await dispatch(getUserStatus())
       }
       setIsLoading(false)
     }
-    getUserStatus()
+    onCreate()
   }, [])
 
   return (
@@ -65,7 +67,7 @@ const App = () => {
               exact
               path="/"
               component={ViewDashboard}
-              isAuthenticated={!!currentUser}
+              isAuthenticated={!!authenticatedUser}
             />
             <Route path="/login" component={ViewLogin} />
             <Route path="/register" component={ViewRegister} />

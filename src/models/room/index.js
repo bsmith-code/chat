@@ -1,7 +1,7 @@
 import API from '../../clients'
 import { handleError } from '../../helpers'
 
-const fetchRooms = async () => {
+const fetchAllRooms = async () => {
   try {
     const route = `/rooms`
     const { data } = await API.get(route)
@@ -23,4 +23,4 @@ const fetchMessages = async roomId => {
   }
 }
 
-export { fetchRooms, fetchMessages }
+export { fetchAllRooms, fetchMessages }

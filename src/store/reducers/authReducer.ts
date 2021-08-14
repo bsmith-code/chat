@@ -26,17 +26,20 @@ const initialState: IAuthState = {
 }
 
 // API Calls
-const login = createAsyncThunk(
+export const login = createAsyncThunk(
   'auth/login',
   async ({ username, password }: { username: string; password: string }) => {
     const response = await postLogin(username, password)
     return response
   }
 )
-const getUserStatus = createAsyncThunk('auth/getUserStatus', async () => {
-  const response = await fetchUserStatus()
-  return response
-})
+export const getUserStatus = createAsyncThunk(
+  'auth/getUserStatus',
+  async () => {
+    const response = await fetchUserStatus()
+    return response
+  }
+)
 
 const authSlice = createSlice({
   name: 'auth',

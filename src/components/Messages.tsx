@@ -9,7 +9,7 @@ const Messages = () => {
   //   })
   // }, [])
 
-  return <div />
+  return <div>Messages</div>
 }
 
 export default Messages

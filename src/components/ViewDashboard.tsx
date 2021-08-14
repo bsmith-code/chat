@@ -4,17 +4,17 @@ import styled from 'styled-components'
 import LoaderPage from './LoaderPage'
 import Rooms from './Rooms'
 import Messages from './Messages'
-import actions from '../store/actions'
+import { getAllRooms } from '../store/reducers/roomsReducer'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(false)
-  const rooms = useSelector(state => state.room.rooms)
+  const rooms = useSelector((state: any) => state.rooms.allRooms)
 
   useEffect(() => {
     const getRooms = async () => {
       setIsLoading(true)
-      await dispatch(actions.room.getRooms())
+      await dispatch(getAllRooms)
       setIsLoading(false)
     }
     getRooms()

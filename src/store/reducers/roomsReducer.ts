@@ -1,28 +1,29 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { fetchRooms } from '../../models/room'
-interface IRoom {
+import { fetchAllRooms } from '../../models/room'
+export interface IRoom {
   id: string
   name: string
   type: boolean
 }
 
 interface IRoomsState {
-  rooms: {
+  allRooms: {
     data: IRoom[]
     isLoading: boolean
     error: Record<string, unknown>
   }
 }
 const initialState: IRoomsState = {
-  rooms: {
+  allRooms: {
     data: [],
     error: {},
     isLoading: false
   }
 }
 
-const getRooms = createAsyncThunk('rooms/getAllRooms', async () => {
-  const response = await fetchRooms()
+// API Calls
+export const getAllRooms = createAsyncThunk('rooms/getAllRooms', async () => {
+  const response = await fetchAllRooms()
   return response
 })
 
@@ -31,22 +32,22 @@ const roomsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [getRooms.pending.type]: state => {
-      state.rooms = {
+    [getAllRooms.pending.type]: state => {
+      state.allRooms = {
         data: [],
         error: {},
         isLoading: true
       }
     },
-    [getRooms.fulfilled.type]: (state, action: PayloadAction<IRoom[]>) => {
-      state.rooms = {
+    [getAllRooms.fulfilled.type]: (state, action: PayloadAction<IRoom[]>) => {
+      state.allRooms = {
         error: {},
         isLoading: false,
         data: action.payload
       }
     },
-    [getRooms.rejected.type]: (state, action) => {
-      state.rooms = {
+    [getAllRooms.rejected.type]: (state, action) => {
+      state.allRooms = {
         data: [],
         isLoading: false,
         error: action.payload

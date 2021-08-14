@@ -1,94 +1,97 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, FormEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from 'react-loaders'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
-import actions from '../store/actions'
+import { login } from '../store/reducers/authReducer'
 
 const LoginForm = () => {
+  // Composition
   const history = useHistory()
   const dispatch = useDispatch()
-  const currentUser = useSelector(state => state.auth.currentUser)
-  const [isLoading, setIsLoading] = useState(false)
-  const [fields, updateFields] = useState([
-    {
-      name: 'username',
-      placeholder: 'Username',
-      type: 'text',
-      value: '',
-      required: true,
-      errors: []
-    },
-    {
-      name: 'password',
-      placeholder: 'Password',
-      type: 'password',
-      value: '',
-      required: true,
-      errors: []
+  const { data: authenticatedUser } = useSelector(
+    (state: any) => state.auth.authenticatedUser
+  )
+
+  // Form Fields
+  interface IFormFields {
+    [key: string]: {
+      type: string
+      value: string
+      placeholder: string
     }
-  ])
+  }
+  const [fields, setFields] = useState<IFormFields>({
+    username: {
+      value: '',
+      type: 'text',
+      placeholder: 'Username'
+    },
+    password: {
+      value: '',
+      type: 'password',
+      placeholder: 'Password'
+    }
+  })
 
   useEffect(() => {
-    if (currentUser) {
+    if (authenticatedUser) {
       history.push('/')
     }
-  }, [currentUser])
+  }, [authenticatedUser])
 
-  const handleInputChange = idx => e => {
-    const newFields = [...fields]
-    newFields[idx] = {
-      ...newFields[idx],
-      value: e.target.value
-    }
-    updateFields(newFields)
-  }
+  const handleInputChange = (event: FormEvent, field: string) => {
+    const { value } = event.target as HTMLInputElement
 
-  const handleSubmit = async () => {
-    setIsLoading(true)
-    const formData = {}
-    fields.map(field => {
-      formData[field.name] = field.value
-    })
-    await dispatch(actions.auth.login(formData))
-    setIsLoading(false)
-  }
-
-  const validateForm = e => {
-    e.preventDefault()
-
-    const newFields = [...fields]
-    newFields.map(field => {
-      if (!field.value) {
-        field.errors = ['This field is required']
-      } else {
-        field.errors = []
+    setFields({
+      ...fields,
+      [field]: {
+        ...fields[field],
+        value
       }
     })
-    updateFields(newFields)
-
-    if (fields.every(field => !field.errors.length)) {
-      handleSubmit()
-    }
   }
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+
+    // Get Form Values
+    const {
+      username: { value: username },
+      password: { value: password }
+    } = fields
+
+    // Prepare JSON Data
+    const jsonData = {
+      username,
+      password
+    }
+
+    await dispatch(login(jsonData))
+    setIsSubmitting(false)
+  }
+
   return (
-    <form onSubmit={e => validateForm(e)}>
-      {isLoading ? (
-        <Loader type="ball-grid-pulse" />
+    <form onSubmit={handleSubmit}>
+      {isSubmitting ? (
+        <Loader type="ball-grid-pulse" active />
       ) : (
-        fields.map((field, idx) => (
-          <fieldset key={`input-${idx}`}>
-            <input
-              type={field.type}
-              name={field.name}
-              placeholder={field.placeholder}
-              onChange={handleInputChange(idx)}
-            />
-            {field.errors.length > 0 && (
-              <ErrorMsg>{(field.errors, field.errors.join(', '))}</ErrorMsg>
-            )}
-          </fieldset>
-        ))
+        Object.keys(fields).map((field: string) => {
+          const { type, value, placeholder } = fields[field]
+
+          return (
+            <fieldset key={`input-${field}`}>
+              <input
+                required
+                type={type}
+                name={field}
+                value={value}
+                placeholder={placeholder}
+                onInput={event => handleInputChange(event, field)}
+              />
+            </fieldset>
+          )
+        })
       )}
       <SubmitBtn type="submit">Login</SubmitBtn>
     </form>
