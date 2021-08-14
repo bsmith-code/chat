@@ -12,7 +12,7 @@ const fetchUserStatus = async () => {
   }
 }
 
-const loginUser = async ({ username, password }) => {
+const postLogin = async (username, password) => {
   try {
     const route = `/auth/login`
     const { data } = await API.post(route, { username, password })
@@ -23,7 +23,7 @@ const loginUser = async ({ username, password }) => {
   }
 }
 
-const logoutUser = async () => {
+const postLogout = async () => {
   try {
     const route = `/auth/logout`
     const user = await API.post(route, {})
@@ -34,4 +34,4 @@ const logoutUser = async () => {
   }
 }
 
-export { fetchUserStatus, loginUser, logoutUser }
+export { fetchUserStatus, postLogin, postLogout }
