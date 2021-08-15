@@ -8,14 +8,13 @@ import { getAllRooms } from '../store/reducers/roomsReducer'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
-  const [isLoading, setIsLoading] = useState(false)
-  const rooms = useSelector((state: any) => state.rooms.allRooms)
+  const { data: allRooms, isLoading } = useSelector(
+    (state: any) => state.rooms.allRooms
+  )
 
   useEffect(() => {
     const getRooms = async () => {
-      setIsLoading(true)
       await dispatch(getAllRooms)
-      setIsLoading(false)
     }
     getRooms()
   }, [])
@@ -25,7 +24,7 @@ const Dashboard = () => {
   ) : (
     <DashboardMain>
       <DashboardRooms>
-        <Rooms rooms={rooms} />
+        <Rooms rooms={allRooms} />
       </DashboardRooms>
       <DashboardMessages>
         <Messages />

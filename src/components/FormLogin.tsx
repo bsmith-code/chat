@@ -34,12 +34,6 @@ const LoginForm = () => {
     }
   })
 
-  useEffect(() => {
-    if (authenticatedUser) {
-      history.push('/')
-    }
-  }, [authenticatedUser])
-
   const handleInputChange = (event: FormEvent, field: string) => {
     const { value } = event.target as HTMLInputElement
 
@@ -52,8 +46,8 @@ const LoginForm = () => {
     })
   }
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const handleSubmit = async () => {
-    setIsSubmitting(true)
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
 
     // Get Form Values
     const {
@@ -67,8 +61,11 @@ const LoginForm = () => {
       password
     }
 
+    setIsSubmitting(true)
     await dispatch(login(jsonData))
     setIsSubmitting(false)
+
+    history.push('/')
   }
 
   return (
@@ -102,13 +99,6 @@ const SubmitBtn = styled.button`
   width: 100%;
   margin: 40px 0 0 0;
   padding: 8px 10px;
-`
-
-const ErrorMsg = styled.p`
-  margin: 0;
-  font-size: 12px;
-  text-align: left;
-  color: var(--red);
 `
 
 export default LoginForm
