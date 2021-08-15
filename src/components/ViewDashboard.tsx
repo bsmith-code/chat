@@ -39,7 +39,7 @@ const DashboardMain = styled.main`
 `
 const DashboardRooms = styled.section`
   height: 100%;
-  width: 450px;
+  width: 250px;
   background: var(--light-gray);
 `
 const DashboardMessages = styled.section`

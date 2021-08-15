@@ -3,6 +3,7 @@ import { getAccessToken } from '../helpers'
 
 const API = axios.create({
   baseURL: `${process.env.REACT_APP_API_GATEWAY_URL}/chat`,
+  withCredentials: true,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json'

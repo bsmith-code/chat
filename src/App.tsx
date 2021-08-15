@@ -9,9 +9,6 @@ import { getUserStatus } from './store/reducers/authReducer'
 const App = (): JSX.Element => {
   const dispatch = useDispatch()
   const accessToken = getAccessToken()
-  const { data: authenticatedUser, isLoading } = useSelector(
-    (state: any) => state.auth.authenticatedUser
-  )
 
   useEffect(() => {
     const onCreate = async () => {
@@ -25,7 +22,7 @@ const App = (): JSX.Element => {
   return (
     <>
       <Styles />
-      {isLoading ? <LoaderPage /> : <AppRoutes />}
+      <AppRoutes />
     </>
   )
 }

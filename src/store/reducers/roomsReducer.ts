@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { fetchAllRooms } from '../../models/room'
+import { fetchAllRooms, postCreateRoom } from '../../models/room'
 export interface IRoom {
   id: string
   name: string
@@ -26,6 +26,12 @@ export const getAllRooms = createAsyncThunk('rooms/getAllRooms', async () => {
   const response = await fetchAllRooms()
   return response
 })
+export const createRoom = createAsyncThunk(
+  'rooms/createRoom',
+  async (jsonData: { name: string; users: string[] }) => {
+    await postCreateRoom(jsonData)
+  }
+)
 
 const roomsSlice = createSlice({
   name: 'rooms',

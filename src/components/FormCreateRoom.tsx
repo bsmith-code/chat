@@ -1,13 +1,9 @@
-import Loader from 'react-loaders'
-import styled from 'styled-components'
-import { useDispatch } from 'react-redux'
 import { useState, FormEvent } from 'react'
-import { useHistory } from 'react-router-dom'
-import { login } from '../store/reducers/authReducer'
+import { useDispatch } from 'react-redux'
+import { createRoom } from '../store/reducers/roomsReducer'
 
-const LoginForm = () => {
+const FormCreateRoom = (): JSX.Element => {
   // Composition
-  const history = useHistory()
   const dispatch = useDispatch()
 
   // Form Fields
@@ -19,15 +15,15 @@ const LoginForm = () => {
     }
   }
   const [fields, setFields] = useState<IFormFields>({
-    username: {
+    name: {
       value: '',
       type: 'text',
-      placeholder: 'Username'
+      placeholder: 'Room Name'
     },
-    password: {
+    users: {
       value: '',
-      type: 'password',
-      placeholder: 'Password'
+      type: 'textarea',
+      placeholder: 'Enter emails or usernames separated by commas'
     }
   })
 
@@ -48,27 +44,25 @@ const LoginForm = () => {
 
     // Get Form Values
     const {
-      username: { value: username },
-      password: { value: password }
+      name: { value: name },
+      users: { value: users }
     } = fields
 
     // Prepare JSON Data
     const jsonData = {
-      username,
-      password
+      name,
+      users: users.split(',')
     }
 
     setIsSubmitting(true)
-    await dispatch(login(jsonData))
+    await dispatch(createRoom(jsonData))
     setIsSubmitting(false)
-
-    history.push('/')
   }
 
   return (
     <form onSubmit={handleSubmit}>
       {isSubmitting ? (
-        <Loader type="ball-grid-pulse" active />
+        <div>Submitting...</div>
       ) : (
         Object.keys(fields).map((field: string) => {
           const { type, value, placeholder } = fields[field]
@@ -87,15 +81,9 @@ const LoginForm = () => {
           )
         })
       )}
-      <SubmitBtn type="submit">Login</SubmitBtn>
+      <button type="submit">Create</button>
     </form>
   )
 }
 
-const SubmitBtn = styled.button`
-  width: 100%;
-  margin: 40px 0 0 0;
-  padding: 8px 10px;
-`
-
-export default LoginForm
+export default FormCreateRoom
