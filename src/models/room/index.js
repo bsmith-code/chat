@@ -1,7 +1,7 @@
 import API from '../../clients'
 import { handleError } from '../../helpers'
 
-export const fetchAllRooms = async () => {
+export const fetchUserRooms = async () => {
   try {
     const route = `/rooms`
     const { data } = await API.get(route)
@@ -26,6 +26,17 @@ export const postCreateRoom = async jsonData => {
 export const fetchRoomMessages = async roomId => {
   try {
     const route = `/rooms/${roomId}/messages`
+    const { data } = await API.get(route)
+
+    return data
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+export const fetchRoomMemberStatus = async roomId => {
+  try {
+    const route = `/rooms/${roomId}/member-status`
     const { data } = await API.get(route)
 
     return data

@@ -1,7 +1,7 @@
 import { useEffect, lazy, Suspense } from 'react'
 import { getAccessToken } from '../helpers'
 import { useSelector, useDispatch } from 'react-redux'
-import { getUserStatus } from '../store/reducers/authReducer'
+import { getUserStatus } from '../store/slices/authSlice'
 import { useHistory } from 'react-router-dom'
 
 const PublicRoutes = lazy(() => import('./PublicRoutes'))

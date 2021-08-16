@@ -1,6 +1,6 @@
 import { useState, FormEvent } from 'react'
 import { useDispatch } from 'react-redux'
-import { createRoom } from '../store/reducers/roomsReducer'
+import { createRoom } from '../store/slices/roomsSlice'
 
 const FormCreateRoom = (): JSX.Element => {
   // Composition

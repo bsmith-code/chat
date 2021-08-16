@@ -17,9 +17,7 @@ const ProtectedRouteLayout = ({
     render={props => (
       <>
         <AppHeader />
-        <AppMain>
-          <Component {...props} />
-        </AppMain>
+        <Component {...props} />
         <AppFooter />
       </>
     )}
@@ -45,9 +43,7 @@ const AppHeader = styled.header`
   align-items: center;
   padding: 0 20px 0 0;
 `
-const AppMain = styled.main`
-  width: 100%;
-`
+
 const AppFooter = styled.footer`
   background: gray;
   width: 100%;

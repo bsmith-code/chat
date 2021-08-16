@@ -4,7 +4,7 @@ import Styles from './styles'
 import AppRoutes from './routes'
 import { getAccessToken } from './helpers'
 import LoaderPage from './components/LoaderPage'
-import { getUserStatus } from './store/reducers/authReducer'
+import { getUserStatus } from './store/slices/authSlice'
 
 const App = (): JSX.Element => {
   const dispatch = useDispatch()
