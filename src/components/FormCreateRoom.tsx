@@ -51,7 +51,7 @@ const FormCreateRoom = (): JSX.Element => {
     // Prepare JSON Data
     const jsonData = {
       name,
-      users: users.split(',')
+      users: users.split(', ')
     }
 
     setIsSubmitting(true)
