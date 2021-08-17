@@ -35,9 +35,9 @@ const ProtectedRoutes = (): JSX.Element => {
 }
 
 const AppHeader = styled.header`
-  background: var(--navy-blue);
+  background: var(--blue);
   width: 100%;
-  height: 80px;
+  height: 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,7 +45,7 @@ const AppHeader = styled.header`
 `
 
 const AppFooter = styled.footer`
-  background: gray;
+  background: var(--gray);
   width: 100%;
   height: 40px;
 `

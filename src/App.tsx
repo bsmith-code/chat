@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { useAppDispatch } from './store'
 import Styles from './styles'
 import AppRoutes from './routes'
 import { getAccessToken } from './helpers'
-import LoaderPage from './components/LoaderPage'
 import { getUserStatus } from './store/slices/authSlice'
 
 const App = (): JSX.Element => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const accessToken = getAccessToken()
 
   useEffect(() => {

@@ -1,13 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { fetchUserStatus, postLogin } from '../../models/auth'
-
-interface IAuthenticatedUser {
-  id: string
-  email: string
-  lastName: string
-  username: string
-  firstName: string
-}
+import { IAuthenticatedUser } from '../../types'
 
 interface IAuthState {
   authenticatedUser: {

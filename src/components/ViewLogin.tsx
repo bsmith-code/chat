@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../store'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import LoginForm from './FormLogin'
 
 const Login = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   // useEffect(() => {
   //   dispatch(actions.auth.logout())

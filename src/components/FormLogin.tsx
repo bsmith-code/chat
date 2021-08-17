@@ -1,6 +1,6 @@
 import Loader from 'react-loaders'
 import styled from 'styled-components'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../store'
 import { useState, FormEvent } from 'react'
 import { useHistory } from 'react-router-dom'
 import { login } from '../store/slices/authSlice'
@@ -8,7 +8,7 @@ import { login } from '../store/slices/authSlice'
 const LoginForm = () => {
   // Composition
   const history = useHistory()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   // Form Fields
   interface IFormFields {

@@ -1,19 +1,19 @@
 import styled from 'styled-components'
 import UserRooms from './UserRooms'
-import RoomMessages from './RoomMessages'
+import RoomCurrent from './RoomCurrent'
 
-const Dashboard = () => {
+const Dashboard = (): JSX.Element => {
   return (
     <Main>
       <UserRooms />
-      <RoomMessages />
+      <RoomCurrent />
     </Main>
   )
 }
 
 const Main = styled.main`
   display: flex;
-  height: 100vh;
+  height: calc(100vh - 80px);
 `
 
 export default Dashboard

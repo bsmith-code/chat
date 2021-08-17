@@ -1,23 +1,14 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getRoomMemberStatus } from '../store/slices/roomsSlice'
+import { useSelector } from 'react-redux'
+import { useAppDispatch } from '../store'
+import { IRoom } from '../types'
 import styled from 'styled-components'
 
-const RoomMessages = () => {
-  // Composition
-  const dispatch = useDispatch()
-  const currentRoomId = useSelector((state: any) => state.rooms.currentRoomId)
+interface IProps {
+  currentRoom: IRoom
+}
 
-  // Get User Rooms on Create
-  useEffect(() => {
-    if (currentRoomId) {
-      // eslint-disable-next-line prettier/prettier
-      (async () => {
-        await dispatch(getRoomMemberStatus(currentRoomId))
-      })()
-    }
-  }, [currentRoomId])
-
+const RoomMessages = ({ currentRoom }: IProps) => {
   return <Wrapper>Test</Wrapper>
 }
 

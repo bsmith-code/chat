@@ -1,10 +1,10 @@
 import { useState, FormEvent } from 'react'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../store'
 import { createRoom } from '../store/slices/roomsSlice'
 
 const FormCreateRoom = (): JSX.Element => {
   // Composition
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   // Form Fields
   interface IFormFields {

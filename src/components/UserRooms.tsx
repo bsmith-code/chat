@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { useAppDispatch } from '../store'
 import styled from 'styled-components'
 import ModalCreateRoom from './ModalCreateRoom'
-import {
-  IRoom,
-  getUserRooms,
-  setcurrentRoomId
-} from '../store/slices/roomsSlice'
+import { IRoom } from '../types'
+import { getUserRooms, setCurrentRoomId } from '../store/slices/roomsSlice'
 
 const UserRooms = (): JSX.Element => {
   // Composition
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { data: userRooms, isLoading } = useSelector(
     (state: any) => state.rooms.userRooms
   )
@@ -43,7 +41,7 @@ const UserRooms = (): JSX.Element => {
           {userRooms.map((room: IRoom) => (
             <Room
               key={room.id}
-              onClick={() => dispatch(setcurrentRoomId(room.id))}
+              onClick={() => dispatch(setCurrentRoomId(room.id ?? ''))}
             >
               {room.name}
             </Room>

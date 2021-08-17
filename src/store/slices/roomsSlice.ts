@@ -1,27 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import {
-  fetchRoomMemberStatus,
+  putJoinRoom,
+  fetchRoomById,
   fetchUserRooms,
-  postCreateRoom
+  postCreateRoom,
+  fetchRoomMemberStatus
 } from '../../models/room'
+import { IRoom, IMember } from '../../types'
 
-//Types
-export interface IRoom {
-  id: string
-  name: string
-  type: boolean
-}
-
-export interface IMember {
-  id?: string
-  userId?: string
-  roomId?: string
-  invitedAt?: string
-  acceptedAt?: string | null
-}
-
-export interface IRoomsState {
+interface IRoomsState {
   currentRoomId: string
+  currentRoom: {
+    data: IRoom
+    isLoading: boolean
+    error: Record<string, unknown>
+  }
   memberStatus: {
     data: IMember
     isLoading: boolean
@@ -36,6 +29,11 @@ export interface IRoomsState {
 
 export const initialState: IRoomsState = {
   currentRoomId: '',
+  currentRoom: {
+    data: {},
+    error: {},
+    isLoading: false
+  },
   userRooms: {
     data: [],
     error: {},
@@ -49,11 +47,17 @@ export const initialState: IRoomsState = {
 }
 
 // API Calls
+export const getRoomById = createAsyncThunk(
+  'rooms/getRoomById',
+  async (roomId: string) => {
+    const response = await fetchRoomById(roomId)
+    return response
+  }
+)
 export const getUserRooms = createAsyncThunk('rooms/getUserRooms', async () => {
   const response = await fetchUserRooms()
   return response
 })
-
 export const getRoomMemberStatus = createAsyncThunk(
   'rooms/getRoomMemberStatus',
   async (roomId: string) => {
@@ -61,11 +65,16 @@ export const getRoomMemberStatus = createAsyncThunk(
     return response
   }
 )
-
 export const createRoom = createAsyncThunk(
   'rooms/createRoom',
   async (jsonData: { name: string; users: string[] }) => {
     await postCreateRoom(jsonData)
+  }
+)
+export const joinRoom = createAsyncThunk(
+  'rooms/joinRoom',
+  async (roomId: string) => {
+    await putJoinRoom(roomId)
   }
 )
 
@@ -73,11 +82,34 @@ const roomsSlice = createSlice({
   name: 'rooms',
   initialState,
   reducers: {
-    setcurrentRoomId(state, action: PayloadAction<string>) {
+    setCurrentRoomId(state, action: PayloadAction<string>) {
       state.currentRoomId = action.payload
     }
   },
   extraReducers: {
+    // Get Room by ID
+    [getRoomById.pending.type]: state => {
+      state.currentRoom = {
+        data: {},
+        error: {},
+        isLoading: true
+      }
+    },
+    [getRoomById.fulfilled.type]: (state, action: PayloadAction<IRoom>) => {
+      state.currentRoom = {
+        error: {},
+        isLoading: false,
+        data: action.payload
+      }
+    },
+    [getRoomById.rejected.type]: (state, action) => {
+      state.currentRoom = {
+        data: {},
+        isLoading: false,
+        error: action.payload
+      }
+    },
+
     // Get User Rooms
     [getUserRooms.pending.type]: state => {
       state.userRooms = {
@@ -129,5 +161,5 @@ const roomsSlice = createSlice({
   }
 })
 
-export const { setcurrentRoomId } = roomsSlice.actions
+export const { setCurrentRoomId } = roomsSlice.actions
 export default roomsSlice.reducer
