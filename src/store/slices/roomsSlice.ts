@@ -50,31 +50,32 @@ export const initialState: IRoomsState = {
 export const getRoomById = createAsyncThunk(
   'rooms/getRoomById',
   async (roomId: string) => {
-    const response = await fetchRoomById(roomId)
-    return response
+    return (await fetchRoomById(roomId)) as IRoom
   }
 )
+
 export const getUserRooms = createAsyncThunk('rooms/getUserRooms', async () => {
-  const response = await fetchUserRooms()
-  return response
+  return (await fetchUserRooms()) as IRoom[]
 })
+
 export const getRoomMemberStatus = createAsyncThunk(
   'rooms/getRoomMemberStatus',
   async (roomId: string) => {
-    const response = await fetchRoomMemberStatus(roomId)
-    return response
+    return (await fetchRoomMemberStatus(roomId)) as IMember
   }
 )
+
 export const createRoom = createAsyncThunk(
   'rooms/createRoom',
   async (jsonData: { name: string; users: string[] }) => {
-    await postCreateRoom(jsonData)
+    return (await postCreateRoom(jsonData)) as IRoom
   }
 )
+
 export const joinRoom = createAsyncThunk(
   'rooms/joinRoom',
   async (roomId: string) => {
-    await putJoinRoom(roomId)
+    return (await putJoinRoom(roomId)) as IMember
   }
 )
 

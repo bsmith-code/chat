@@ -2,7 +2,7 @@ import API from '../../clients'
 import { handleError } from '../../helpers'
 import { IRoom, IMember } from '../../types'
 
-export const fetchRoomById = async (roomId: string) => {
+export const fetchRoomById = async (roomId: string): Promise<IRoom | void> => {
   try {
     const route = `/rooms/${roomId}`
     const { data } = await API.get(route)
@@ -13,7 +13,7 @@ export const fetchRoomById = async (roomId: string) => {
   }
 }
 
-export const fetchUserRooms = async () => {
+export const fetchUserRooms = async (): Promise<IRoom[] | void> => {
   try {
     const route = `/rooms`
     const { data } = await API.get(route)
@@ -27,7 +27,7 @@ export const fetchUserRooms = async () => {
 export const postCreateRoom = async (jsonData: {
   name: string
   users: string[]
-}) => {
+}): Promise<{ room: IRoom; members: IMember[] } | void> => {
   try {
     const route = `/rooms`
     const { data } = await API.post(route, jsonData)
@@ -49,7 +49,9 @@ export const fetchRoomMessages = async (roomId: string) => {
   }
 }
 
-export const fetchRoomMemberStatus = async (roomId: string) => {
+export const fetchRoomMemberStatus = async (
+  roomId: string
+): Promise<IMember | void> => {
   try {
     const route = `/rooms/${roomId}/member-status`
     const { data } = await API.get(route)
@@ -60,10 +62,12 @@ export const fetchRoomMemberStatus = async (roomId: string) => {
   }
 }
 
-export const putJoinRoom = async (roomId: string) => {
+export const putJoinRoom = async (roomId: string): Promise<IMember | void> => {
   try {
     const route = `rooms/${roomId}/join`
-    await API.put(route)
+    const { data } = await API.put(route)
+
+    return data
   } catch (error) {
     handleError(error)
   }
