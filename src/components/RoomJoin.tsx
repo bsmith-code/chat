@@ -1,7 +1,7 @@
 import { useAppDispatch } from '../store'
 import styled from 'styled-components'
 import { IRoom } from '../types'
-import { joinRoom } from '../store/slices/roomsSlice'
+import { joinRoom, getRoomMemberStatus } from '../store/slices/roomsSlice'
 
 interface IProps {
   currentRoom: IRoom
@@ -12,6 +12,7 @@ const RoomJoin = ({ currentRoom }: IProps): JSX.Element => {
 
   const handleClick = async () => {
     await dispatch(joinRoom(currentRoom.id ?? ''))
+    await dispatch(getRoomMemberStatus(currentRoom.id ?? ''))
   }
 
   return (

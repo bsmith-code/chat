@@ -1,21 +1,28 @@
-import { useEffect, lazy, Suspense } from 'react'
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from '../store'
+import RoomJoin from './RoomJoin'
+import RoomMessages from './RoomMessages'
 import { getRoomById, getRoomMemberStatus } from '../store/slices/roomsSlice'
-
-const RoomJoin = lazy(() => import('./RoomJoin'))
-const RoomMessages = lazy(() => import('./RoomMessages'))
 
 const RoomCurrent = (): JSX.Element => {
   // Composition
   const dispatch = useAppDispatch()
-  const { data: currentRoom } = useSelector(
-    (state: any) => state.rooms.currentRoom
+  const { isLoading, currentRoom, memberStatus, currentRoomId } = useSelector(
+    (state: any) => {
+      const {
+        currentRoomId,
+        currentRoom: { data: currentRoom, isLoading: isCurrentRoomLoading },
+        memberStatus: { data: memberStatus, isLoading: isMemberStatusLoading }
+      } = state.rooms
+      return {
+        currentRoom,
+        memberStatus,
+        currentRoomId,
+        isLoading: isCurrentRoomLoading || isMemberStatusLoading
+      }
+    }
   )
-  const { data: memberStatus } = useSelector(
-    (state: any) => state.rooms.memberStatus
-  )
-  const currentRoomId = useSelector((state: any) => state.rooms.currentRoomId)
 
   // Get User Rooms on Create
   useEffect(() => {
@@ -31,13 +38,19 @@ const RoomCurrent = (): JSX.Element => {
   }, [currentRoomId])
 
   return currentRoomId ? (
-    <Suspense fallback={false}>
-      {memberStatus?.acceptedAt ? (
-        <RoomMessages currentRoom={currentRoom} />
+    <>
+      {!isLoading ? (
+        <>
+          {!memberStatus.acceptedAt ? (
+            <RoomJoin currentRoom={currentRoom} />
+          ) : (
+            <RoomMessages currentRoom={currentRoom} />
+          )}
+        </>
       ) : (
-        <RoomJoin currentRoom={currentRoom} />
+        <div>Loading...</div>
       )}
-    </Suspense>
+    </>
   ) : (
     <p>Select a Room to start chatting!</p>
   )

@@ -4,7 +4,8 @@ import reducer from './slices'
 
 const store = configureStore({
   reducer,
-  devTools: process.env.NODE_ENV !== 'production'
+  devTools: process.env.NODE_ENV !== 'production',
+  middleware: getDefaultMiddleware => getDefaultMiddleware()
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
