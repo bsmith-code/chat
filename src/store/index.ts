@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import app from './slices/appSlice'
-import auth from './slices/authSlice'
+import auth from '../features/auth'
 import rooms from '../features/rooms'
 
 const reducer = {

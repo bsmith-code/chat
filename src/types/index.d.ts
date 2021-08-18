@@ -12,17 +12,17 @@ export interface IMember {
 }
 
 export interface IAuthenticatedUser {
-  id: string
-  email: string
-  lastName: string
-  username: string
-  firstName: string
+  id?: string
+  email?: string
+  lastName?: string
+  username?: string
+  firstName?: string
 }
 
 export interface IMessage {
-  id: string
-  roomId: string
-  memberId: string
-  createdAt: string
-  updatedAt: string
+  id?: string
+  roomId?: string
+  memberId?: string
+  createdAt?: string
+  updatedAt?: string
 }
