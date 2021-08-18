@@ -3,7 +3,7 @@ import { useAppDispatch } from './store'
 import Styles from './styles'
 import AppRoutes from './routes'
 import { getAccessToken } from './helpers'
-import { getUserStatus } from './store/slices/authSlice'
+import { getUserStatus } from './features/auth'
 
 const App = (): JSX.Element => {
   const dispatch = useAppDispatch()

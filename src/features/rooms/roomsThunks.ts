@@ -6,7 +6,7 @@ import {
   fetchRoomMembers,
   fetchRoomMessages,
   fetchRoomMemberStatus
-} from '../../models/room'
+} from '../../models/rooms'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { IRoom, IMember, IMessage } from '../../types'
 

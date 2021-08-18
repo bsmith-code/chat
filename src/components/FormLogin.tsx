@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useAppDispatch } from '../store'
 import { useState, FormEvent } from 'react'
 import { useHistory } from 'react-router-dom'
-import { login } from '../store/slices/authSlice'
+import { login } from '../features/auth'
 
 const LoginForm = () => {
   // Composition
