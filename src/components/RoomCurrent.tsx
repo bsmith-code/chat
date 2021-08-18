@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../store'
 import RoomJoin from './RoomJoin'
 import RoomMessages from './RoomMessages'
-import { getRoomById, getRoomMemberStatus } from '../store/slices/roomsSlice'
+import { getRoomById, getRoomMemberStatus } from '../features/rooms/roomsThunks'
 
 const RoomCurrent = (): JSX.Element => {
   // Composition
@@ -32,13 +32,13 @@ const RoomCurrent = (): JSX.Element => {
   // Get Room and Member Data
   useEffect(() => {
     if (currentRoomId) {
-      // eslint-disable-next-line prettier/prettier
-      (async () => {
+      const getRoomData = async () => {
         await Promise.all([
           dispatch(getRoomById(currentRoomId)),
           dispatch(getRoomMemberStatus(currentRoomId))
         ])
-      })()
+      }
+      getRoomData()
     }
   }, [currentRoomId])
 

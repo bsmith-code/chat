@@ -18,3 +18,11 @@ export interface IAuthenticatedUser {
   username: string
   firstName: string
 }
+
+export interface IMessage {
+  id: string
+  roomId: string
+  memberId: string
+  createdAt: string
+  updatedAt: string
+}

@@ -1,6 +1,6 @@
 import API from '../../clients'
 import { handleError } from '../../helpers'
-import { IRoom, IMember } from '../../types'
+import { IRoom, IMember, IMessage } from '../../types'
 
 export const fetchRoomById = async (roomId: string): Promise<IRoom | void> => {
   try {
@@ -38,9 +38,24 @@ export const postCreateRoom = async (jsonData: {
   }
 }
 
-export const fetchRoomMessages = async (roomId: string) => {
+export const fetchRoomMessages = async (
+  roomId: string
+): Promise<IMessage[] | void> => {
   try {
     const route = `/rooms/${roomId}/messages`
+    const { data } = await API.get(route)
+
+    return data
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+export const fetchRoomMembers = async (
+  roomId: string
+): Promise<IMember[] | void> => {
+  try {
+    const route = `/rooms/${roomId}/members`
     const { data } = await API.get(route)
 
     return data

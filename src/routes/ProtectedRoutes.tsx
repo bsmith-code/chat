@@ -45,7 +45,7 @@ const AppHeader = styled.header`
 `
 
 const AppFooter = styled.footer`
-  background: var(--gray);
+  background: var(--blue);
   width: 100%;
   height: 40px;
 `

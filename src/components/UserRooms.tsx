@@ -4,7 +4,7 @@ import { useAppDispatch } from '../store'
 import styled from 'styled-components'
 import ModalCreateRoom from './ModalCreateRoom'
 import { IRoom } from '../types'
-import { getUserRooms, setCurrentRoomId } from '../store/slices/roomsSlice'
+import { getUserRooms, setCurrentRoomId } from '../features/rooms'
 
 const UserRooms = (): JSX.Element => {
   // Composition

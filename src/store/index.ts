@@ -1,6 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
-import reducer from './slices'
+import app from './slices/appSlice'
+import auth from './slices/authSlice'
+import rooms from '../features/rooms'
+
+const reducer = {
+  app,
+  auth,
+  rooms
+}
 
 const store = configureStore({
   reducer,
