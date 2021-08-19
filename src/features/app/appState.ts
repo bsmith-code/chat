@@ -1,9 +1,12 @@
+export interface IAppNotification {
+  id: string
+  type: string
+  message: string
+}
 export interface IAppState {
-  isLoading: boolean
-  appNotification: string
+  appNotifications: IAppNotification[]
 }
 
 export const initialState: IAppState = {
-  isLoading: false,
-  appNotification: ''
+  appNotifications: []
 }

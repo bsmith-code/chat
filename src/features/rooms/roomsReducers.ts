@@ -1,26 +1,42 @@
 import {
+  createRoom,
   getRoomById,
   getUserRooms,
   getRoomMembers,
   getRoomMessages,
   getRoomMemberStatus
 } from './roomsThunks'
-import { PayloadAction, ActionReducerMapBuilder } from '@reduxjs/toolkit'
-import { IRoom, IMember, IMessage } from '../../types'
 import { IRoomsState } from './roomsState'
+import { IRoom, IMember, IMessage } from '../../types'
+import { PayloadAction, ActionReducerMapBuilder } from '@reduxjs/toolkit'
 
 export const reducers = {
-  setCurrentRoomId: (
-    state: IRoomsState,
-    action: PayloadAction<string>
-  ): void => {
-    state.currentRoomId = action.payload
+  setCurrentRoom: (state: IRoomsState, action: PayloadAction<IRoom>): void => {
+    state.currentRoom = {
+      isLoading: false,
+      data: action.payload
+    }
   }
 }
 
 export const extraReducers = (
   builder: ActionReducerMapBuilder<IRoomsState>
 ): void => {
+  // Create Room
+  builder
+    .addCase(createRoom.fulfilled, (state, action: PayloadAction<IRoom>) => {
+      state.currentRoom = {
+        isLoading: false,
+        data: action.payload
+      }
+    })
+    .addCase(createRoom.rejected, state => {
+      state.currentRoom = {
+        data: {},
+        isLoading: false
+      }
+    })
+
   // Get Room by ID
   builder
     .addCase(getRoomById.pending, state => {

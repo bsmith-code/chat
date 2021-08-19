@@ -1,7 +1,6 @@
 import { IRoom, IMember, IMessage } from '../../types'
 
 export interface IRoomsState {
-  currentRoomId: string
   currentRoom: {
     data: IRoom
     isLoading: boolean
@@ -25,7 +24,6 @@ export interface IRoomsState {
 }
 
 export const initialState: IRoomsState = {
-  currentRoomId: '',
   currentRoom: {
     data: {},
     isLoading: false

@@ -4,7 +4,7 @@ import { useAppDispatch } from '../store'
 import styled from 'styled-components'
 import ModalCreateRoom from './ModalCreateRoom'
 import { IRoom } from '../types'
-import { getUserRooms, setCurrentRoomId } from '../features/rooms'
+import { getUserRooms, setCurrentRoom } from '../features/rooms'
 
 const UserRooms = (): JSX.Element => {
   // Composition
@@ -39,10 +39,7 @@ const UserRooms = (): JSX.Element => {
       {userRooms.length ? (
         <>
           {userRooms.map((room: IRoom) => (
-            <Room
-              key={room.id}
-              onClick={() => dispatch(setCurrentRoomId(room.id ?? ''))}
-            >
+            <Room key={room.id} onClick={() => dispatch(setCurrentRoom(room))}>
               {room.name}
             </Room>
           ))}

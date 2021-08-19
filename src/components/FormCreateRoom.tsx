@@ -1,8 +1,12 @@
 import { useState, FormEvent } from 'react'
 import { useAppDispatch } from '../store'
-import { createRoom } from '../features/rooms/roomsThunks'
+import { createRoom, getUserRooms } from '../features/rooms'
 
-const FormCreateRoom = (): JSX.Element => {
+type IProps = {
+  toggleCreateRoom: () => void
+}
+
+const FormCreateRoom = ({ toggleCreateRoom }: IProps): JSX.Element => {
   // Composition
   const dispatch = useAppDispatch()
 
@@ -56,7 +60,10 @@ const FormCreateRoom = (): JSX.Element => {
 
     setIsSubmitting(true)
     await dispatch(createRoom(jsonData))
+    await dispatch(getUserRooms())
     setIsSubmitting(false)
+
+    toggleCreateRoom()
   }
 
   return (

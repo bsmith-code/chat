@@ -7,15 +7,9 @@ import { getRoomById, getRoomMemberStatus } from '../features/rooms/roomsThunks'
 const RoomCurrent = (): JSX.Element => {
   // Composition
   const dispatch = useAppDispatch()
-  const {
-    isLoading,
-    currentRoom,
-    memberStatus,
-    currentRoomId
-  } = useAppSelector(state => {
+  const { isLoading, currentRoom, memberStatus } = useAppSelector(state => {
     const {
       rooms: {
-        currentRoomId,
         currentRoom: { data: currentRoom, isLoading: isCurrentRoomLoading },
         memberStatus: { data: memberStatus, isLoading: isMemberStatusLoading }
       }
@@ -24,25 +18,21 @@ const RoomCurrent = (): JSX.Element => {
     return {
       currentRoom,
       memberStatus,
-      currentRoomId,
       isLoading: isCurrentRoomLoading || isMemberStatusLoading
     }
   })
 
   // Get Room and Member Data
   useEffect(() => {
-    if (currentRoomId) {
-      const getRoomData = async () => {
-        await Promise.all([
-          dispatch(getRoomById(currentRoomId)),
-          dispatch(getRoomMemberStatus(currentRoomId))
-        ])
-      }
-      getRoomData()
+    if (currentRoom.id) {
+      // eslint-disable-next-line prettier/prettier
+      (async () => {
+        await dispatch(getRoomMemberStatus(currentRoom?.id ?? ''))
+      })()
     }
-  }, [currentRoomId])
+  }, [currentRoom.id])
 
-  return currentRoomId ? (
+  return currentRoom.id ? (
     <>
       {!isLoading ? (
         <>

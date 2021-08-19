@@ -19,7 +19,7 @@ const ModalCreateRoom = ({ toggleCreateRoom }: IProps): JSX.Element => {
           </button>
         </header>
         <main className="modal__main">
-          <FormCreateRoom />
+          <FormCreateRoom toggleCreateRoom={toggleCreateRoom} />
         </main>
       </article>
     </section>
