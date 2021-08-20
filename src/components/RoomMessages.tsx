@@ -1,13 +1,17 @@
-import { useEffect } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store'
 import { IRoom } from '../types'
 import styled from 'styled-components'
-import { getRoomMembers, getRoomMessages } from '../features/rooms/roomsThunks'
+import {
+  createMessage,
+  getRoomMembers,
+  getRoomMessages
+} from '../features/rooms/roomsThunks'
 interface IProps {
   currentRoom: IRoom
 }
 
-const RoomMessages = ({ currentRoom }: IProps) => {
+const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
   // Composition
   const dispatch = useAppDispatch()
   const { roomMembers, roomMessages, isLoading } = useAppSelector(state => {
@@ -25,12 +29,26 @@ const RoomMessages = ({ currentRoom }: IProps) => {
     }
   })
 
+  // Handle Input Change
+  const [message, setMessage] = useState('')
+  const handleInputChange = (event: KeyboardEvent) => {
+    const { value } = event.target as HTMLInputElement
+
+    setMessage(value)
+  }
+
+  //Handle Submit
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault()
+    await dispatch(createMessage(message))
+  }
+
   // Get Room Data
   useEffect(() => {
     const getRoomData = async () => {
-      Promise.all([
-        dispatch(getRoomMembers(currentRoom?.id ?? '')),
-        dispatch(getRoomMessages(currentRoom?.id ?? ''))
+      await Promise.all([
+        dispatch(getRoomMembers()),
+        dispatch(getRoomMessages())
       ])
     }
     getRoomData()
@@ -54,7 +72,13 @@ const RoomMessages = ({ currentRoom }: IProps) => {
         )}
       </Messages>
       <Footer>
-        <CreateMessage type="text" />
+        <SendMessageForm onSubmit={handleSubmit}>
+          <SendMessage
+            type="text"
+            value={message}
+            onInput={handleInputChange}
+          />
+        </SendMessageForm>
       </Footer>
     </Wrapper>
   ) : (
@@ -81,15 +105,17 @@ const RoomMembers = styled.p`
 `
 const Messages = styled.div`
   flex-grow: 1;
+  overflow: auto;
 `
 const Footer = styled.div`
   padding: 12px;
 `
-const CreateMessage = styled.input`
+const SendMessage = styled.input`
   background: var(--light-gray);
   border-radius: 22px;
   border: none;
   padding: 12px 12px 12px 30px;
 `
+const SendMessageForm = styled.form``
 
 export default RoomMessages

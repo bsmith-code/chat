@@ -11,8 +11,8 @@ const RoomJoin = ({ currentRoom }: IProps): JSX.Element => {
   const dispatch = useAppDispatch()
 
   const handleClick = async () => {
-    await dispatch(joinRoom(currentRoom.id ?? ''))
-    await dispatch(getRoomMemberStatus(currentRoom.id ?? ''))
+    await dispatch(joinRoom())
+    await dispatch(getRoomMemberStatus())
   }
 
   return (

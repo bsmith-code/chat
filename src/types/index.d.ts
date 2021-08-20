@@ -22,7 +22,7 @@ export interface IAuthenticatedUser {
 export interface IMessage {
   id?: string
   roomId?: string
-  memberId?: string
+  userId?: string
   createdAt?: string
   updatedAt?: string
 }

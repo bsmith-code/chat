@@ -1,4 +1,4 @@
-import API from '../../clients'
+import { socketAPI, API } from '../../clients'
 import { handleError } from '../../helpers'
 import { IRoom, IMember, IMessage } from '../../types'
 
@@ -83,6 +83,27 @@ export const putJoinRoom = async (roomId: string): Promise<IMember | void> => {
     const { data } = await API.put(route)
 
     return data
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+export const socketCreateMessage = async ({
+  userId,
+  roomId,
+  message
+}: {
+  userId: string
+  roomId: string
+  message: string
+}): Promise<IMessage | void> => {
+  try {
+    const event = 'create-message'
+    await socketAPI().emit(event, { userId, roomId, message })
+
+    socketAPI().on(event, (message: IMessage) => {
+      console.log(message)
+    })
   } catch (error) {
     handleError(error)
   }

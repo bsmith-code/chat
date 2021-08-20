@@ -1,4 +1,4 @@
-import API from '../../clients'
+import { API } from '../../clients'
 import { handleError } from '../../helpers'
 
 const fetchUserStatus = async () => {

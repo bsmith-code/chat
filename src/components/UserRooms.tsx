@@ -57,7 +57,10 @@ const UserRooms = (): JSX.Element => {
 
 const Wrapper = styled.section`
   height: 100%;
-  width: 250px;
+  flex-basis: 250px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: auto;
   background: var(--light-gray);
 `
 const CreateWrapper = styled.div`
