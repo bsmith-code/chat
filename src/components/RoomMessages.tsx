@@ -8,6 +8,7 @@ import {
   getRoomMessages,
   setRoomMessages
 } from '../features/rooms'
+import Message from './Message'
 import { socketAPI } from '../clients'
 interface IProps {
   currentRoom: IRoom
@@ -42,6 +43,7 @@ const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
   //Handle Submit
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
+    setMessage('')
     await dispatch(createMessage(message))
   }
 
@@ -70,7 +72,7 @@ const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
         {roomMessages.length ? (
           <>
             {roomMessages.map(message => (
-              <div key={`message-${message.id}`}>{JSON.stringify(message)}</div>
+              <Message key={`message-${message.id}`} messageObj={message} />
             ))}
           </>
         ) : (
@@ -112,6 +114,7 @@ const RoomMembers = styled.p`
 const Messages = styled.div`
   flex-grow: 1;
   overflow: auto;
+  padding: 20px;
 `
 const Footer = styled.div`
   padding: 12px;

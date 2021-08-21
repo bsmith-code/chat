@@ -9,6 +9,11 @@ export interface IMember {
   roomId?: string
   invitedAt?: string
   acceptedAt?: string | null
+  profile?: {
+    firstName?: string
+    lastName?: string
+    email?: string
+  }
 }
 
 export interface IAuthenticatedUser {
@@ -21,8 +26,10 @@ export interface IAuthenticatedUser {
 
 export interface IMessage {
   id?: string
-  roomId?: string
-  userId?: string
+  message?: string
   createdAt?: string
-  updatedAt?: string
+  author?: {
+    firstName?: string
+    lastName?: string
+  }
 }
