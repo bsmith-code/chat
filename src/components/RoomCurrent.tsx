@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../store'
 import RoomJoin from './RoomJoin'
 import RoomMessages from './RoomMessages'
-import { getRoomMemberStatus } from '../features/rooms/roomsThunks'
+import { getRoomMemberStatus } from '../features/rooms'
 
 const RoomCurrent = (): JSX.Element => {
   // Composition

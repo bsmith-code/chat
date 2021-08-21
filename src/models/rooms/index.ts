@@ -98,12 +98,7 @@ export const socketCreateMessage = async ({
   message: string
 }): Promise<IMessage | void> => {
   try {
-    const event = 'create-message'
-    await socketAPI().emit(event, { userId, roomId, message })
-
-    socketAPI().on(event, (message: IMessage) => {
-      console.log(message)
-    })
+    await socketAPI().emit('create-message', { userId, roomId, message })
   } catch (error) {
     handleError(error)
   }

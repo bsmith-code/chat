@@ -1,5 +1,5 @@
 import { roomsSlice } from './roomsSlice'
 
 export * from './roomsThunks'
-export const { setCurrentRoom } = roomsSlice.actions
+export const { setCurrentRoom, setRoomMessages } = roomsSlice.actions
 export default roomsSlice.reducer

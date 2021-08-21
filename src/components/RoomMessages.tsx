@@ -1,12 +1,14 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store'
-import { IRoom } from '../types'
+import { IMessage, IRoom } from '../types'
 import styled from 'styled-components'
 import {
   createMessage,
   getRoomMembers,
-  getRoomMessages
-} from '../features/rooms/roomsThunks'
+  getRoomMessages,
+  setRoomMessages
+} from '../features/rooms'
+import { socketAPI } from '../clients'
 interface IProps {
   currentRoom: IRoom
 }
@@ -52,6 +54,10 @@ const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
       ])
     }
     getRoomData()
+
+    socketAPI().on('create-message', (message: IMessage) => {
+      dispatch(setRoomMessages(message))
+    })
   }, [])
 
   return !isLoading ? (

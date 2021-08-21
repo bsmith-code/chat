@@ -2,7 +2,6 @@ import {
   createRoom,
   getRoomById,
   getUserRooms,
-  createMessage,
   getRoomMembers,
   getRoomMessages,
   getRoomMemberStatus
@@ -17,6 +16,12 @@ export const reducers = {
       isLoading: false,
       data: action.payload
     }
+  },
+  setRoomMessages: (
+    state: IRoomsState,
+    action: PayloadAction<IMessage>
+  ): void => {
+    state.roomMessages.data.push(action.payload)
   }
 }
 
@@ -154,10 +159,4 @@ export const extraReducers = (
         isLoading: false
       }
     })
-
-  // Send Message
-  builder.addCase(createMessage.pending, (state, action) => {
-    console.log('action', action.payload)
-    state.roomMessages.data.push({})
-  })
 }

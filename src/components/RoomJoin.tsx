@@ -1,7 +1,7 @@
 import { useAppDispatch } from '../store'
 import styled from 'styled-components'
 import { IRoom } from '../types'
-import { joinRoom, getRoomMemberStatus } from '../features/rooms/roomsThunks'
+import { joinRoom, getRoomMemberStatus } from '../features/rooms'
 
 interface IProps {
   currentRoom: IRoom

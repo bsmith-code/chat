@@ -8,7 +8,6 @@ import {
   socketCreateMessage,
   fetchRoomMemberStatus
 } from '../../models/rooms'
-import { socketAPI } from '../../clients'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { IRoom, IMember, IMessage } from '../../types'
 import { IRootState } from '../../store'
@@ -79,6 +78,6 @@ export const createMessage = createAsyncThunk(
     const userId = selectUserId(state)
     const roomId = selectRoomId(state)
 
-    return (await socketCreateMessage({ userId, roomId, message })) as IMessage
+    await socketCreateMessage({ userId, roomId, message })
   }
 )
