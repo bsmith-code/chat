@@ -26,6 +26,7 @@ export interface IAuthenticatedUser {
 
 export interface IMessage {
   id?: string
+  roomId?: string
   message?: string
   createdAt?: string
   author?: {

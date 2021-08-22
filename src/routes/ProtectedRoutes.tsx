@@ -1,53 +1,15 @@
-import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
+import { Switch, BrowserRouter as Router } from 'react-router-dom'
+import LayoutProtected from '../components/LayoutProtected'
 import ViewDashboard from '../components/ViewDashboard'
-import styled from 'styled-components'
-
-interface IDefaultProps {
-  component: any
-  path?: string
-  exact?: boolean
-}
-
-const ProtectedRouteLayout = ({
-  component: Component,
-  ...rest
-}: IDefaultProps) => (
-  <Route
-    {...rest}
-    render={props => (
-      <>
-        <AppHeader />
-        <Component {...props} />
-        <AppFooter />
-      </>
-    )}
-  ></Route>
-)
 
 const ProtectedRoutes = (): JSX.Element => {
   return (
     <Router>
       <Switch>
-        <ProtectedRouteLayout path="/" component={ViewDashboard} />
+        <LayoutProtected path="/" component={ViewDashboard} />
       </Switch>
     </Router>
   )
 }
-
-const AppHeader = styled.header`
-  background: var(--blue);
-  width: 100%;
-  height: 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px 0 0;
-`
-
-const AppFooter = styled.footer`
-  background: var(--blue);
-  width: 100%;
-  height: 40px;
-`
 
 export default ProtectedRoutes

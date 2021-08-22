@@ -36,16 +36,24 @@ const UserRooms = (): JSX.Element => {
         </CreateRoom>
       </CreateWrapper>
 
-      {userRooms.length ? (
+      {!isLoading ? (
         <>
-          {userRooms.map((room: IRoom) => (
-            <Room key={room.id} onClick={() => dispatch(setCurrentRoom(room))}>
-              {room.name}
-            </Room>
-          ))}
+          {userRooms.length ? (
+            <>
+              {userRooms.map((room: IRoom) => (
+                <Room
+                  key={room.id}
+                  onClick={() => dispatch(setCurrentRoom(room))}
+                >
+                  <RoomIcon className="material-icons-outlined">group</RoomIcon>
+                  {room.name}
+                </Room>
+              ))}
+            </>
+          ) : null}
         </>
       ) : (
-        <div>Create a room to start chatting!</div>
+        <div>Loading...</div>
       )}
 
       {isCreateRoomActive && (
@@ -69,11 +77,30 @@ const CreateWrapper = styled.div`
   justify-content: space-between;
   padding: 30px 18px;
 `
-const CreateRoom = styled.button``
+const CreateRoom = styled.button`
+  background: #e5e5e5;
+  line-height: 1;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+`
 const Room = styled.button`
-  display: block;
+  display: flex;
+  align-items: center;
   cursor: pointer;
-  height: 64px;
+  padding: 20px;
+  line-height: 1;
+  width: 100%;
+  text-align: left;
+  background: #e5e5e5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom: 2px solid var(--light-gray);
+`
+const RoomIcon = styled.i`
+  color: var(--blue);
+  margin: 0 8px 0 0;
 `
 
 export default UserRooms

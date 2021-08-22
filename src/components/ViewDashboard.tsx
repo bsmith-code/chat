@@ -23,7 +23,7 @@ const Dashboard = (): JSX.Element => {
 
 const Main = styled.main`
   display: flex;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 100px);
 `
 
 export default Dashboard

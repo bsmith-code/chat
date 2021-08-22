@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '../store'
 import { IMessage, IRoom } from '../types'
 import styled from 'styled-components'
@@ -32,6 +32,12 @@ const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
     }
   })
 
+  // Scroll To Bottom
+  const messagesEnd = useRef<null | HTMLDivElement>(null)
+  const scrollToBottom = () => {
+    messagesEnd?.current?.scrollIntoView()
+  }
+
   // Handle Input Change
   const [message, setMessage] = useState('')
   const handleInputChange = (event: KeyboardEvent) => {
@@ -43,8 +49,8 @@ const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
   //Handle Submit
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
-    setMessage('')
     await dispatch(createMessage(message))
+    setMessage('')
   }
 
   // Get Room Data
@@ -54,13 +60,21 @@ const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
         dispatch(getRoomMembers()),
         dispatch(getRoomMessages())
       ])
+      scrollToBottom()
     }
     getRoomData()
 
     socketAPI().on('create-message', (message: IMessage) => {
-      dispatch(setRoomMessages(message))
+      if (message.roomId === currentRoom.id) {
+        dispatch(setRoomMessages(message))
+      }
     })
   }, [])
+
+  // Scroll to Bottom
+  useEffect(() => {
+    scrollToBottom()
+  }, [roomMessages])
 
   return !isLoading ? (
     <Wrapper>
@@ -74,6 +88,7 @@ const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
             {roomMessages.map(message => (
               <Message key={`message-${message.id}`} messageObj={message} />
             ))}
+            <MessagesEnd ref={messagesEnd}></MessagesEnd>
           </>
         ) : (
           <p>There are no messages in this room.</p>
@@ -116,6 +131,7 @@ const Messages = styled.div`
   overflow: auto;
   padding: 20px;
 `
+const MessagesEnd = styled.div``
 const Footer = styled.div`
   padding: 12px;
 `
