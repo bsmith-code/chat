@@ -53,7 +53,7 @@ export const fetchRoomMessages = async (
 
 export const fetchRoomMembers = async (
   roomId: string
-): Promise<IMember[] | void> => {
+): Promise<{ [key: string]: IMember[] } | void> => {
   try {
     const route = `/rooms/${roomId}/members`
     const { data } = await API.get(route)

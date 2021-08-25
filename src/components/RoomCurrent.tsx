@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../store'
 import RoomJoin from './RoomJoin'
+import RoomDetails from './RoomDetails'
 import RoomMessages from './RoomMessages'
 import { getRoomMemberStatus } from '../features/rooms'
 import styled from 'styled-components'
@@ -23,7 +24,7 @@ const RoomCurrent = (): JSX.Element => {
     }
   })
 
-  // Get Room and Member Data
+  // Get Member Status
   useEffect(() => {
     if (currentRoom.id) {
       // eslint-disable-next-line prettier/prettier
@@ -40,7 +41,10 @@ const RoomCurrent = (): JSX.Element => {
           {!memberStatus.acceptedAt ? (
             <RoomJoin currentRoom={currentRoom} />
           ) : (
-            <RoomMessages currentRoom={currentRoom} />
+            <RoomWrapper>
+              <RoomDetails currentRoom={currentRoom} />
+              <RoomMessages currentRoom={currentRoom} />
+            </RoomWrapper>
           )}
         </>
       ) : (
@@ -48,13 +52,13 @@ const RoomCurrent = (): JSX.Element => {
       )}
     </>
   ) : (
-    <Wrapper>
+    <CreateWrapper>
       <CreateTitle>Select or Create a Room to start chatting!</CreateTitle>
-    </Wrapper>
+    </CreateWrapper>
   )
 }
 
-const Wrapper = styled.section`
+const CreateWrapper = styled.section`
   height: 100%;
   flex-grow: 1;
   display: flex;
@@ -65,7 +69,12 @@ const Wrapper = styled.section`
   max-width: 420px;
   margin: 0 auto;
 `
-
+const RoomWrapper = styled.section`
+  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+`
 const CreateTitle = styled.h1`
   margin: 0 0 20px 0;
   padding: 0;

@@ -14,7 +14,10 @@ export interface IRoomsState {
     isLoading: boolean
   }
   roomMembers: {
-    data: IMember[]
+    data: {
+      accepted: IMember[]
+      pending: IMember[]
+    }
     isLoading: boolean
   }
   roomMessages: {
@@ -37,7 +40,10 @@ export const initialState: IRoomsState = {
     isLoading: false
   },
   roomMembers: {
-    data: [],
+    data: {
+      accepted: [],
+      pending: []
+    },
     isLoading: false
   },
   roomMessages: {

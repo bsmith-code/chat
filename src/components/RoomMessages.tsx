@@ -4,7 +4,6 @@ import { IMessage, IRoom } from '../types'
 import styled from 'styled-components'
 import {
   createMessage,
-  getRoomMembers,
   getRoomMessages,
   setRoomMessages
 } from '../features/rooms'
@@ -17,18 +16,16 @@ interface IProps {
 const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
   // Composition
   const dispatch = useAppDispatch()
-  const { roomMembers, roomMessages, isLoading } = useAppSelector(state => {
+  const { roomMessages, isLoading } = useAppSelector(state => {
     const {
       rooms: {
-        roomMembers: { data: roomMembers, isLoading: isRoomMembersLoading },
-        roomMessages: { data: roomMessages, isLoading: isRoomMessagesLoading }
+        roomMessages: { data: roomMessages, isLoading }
       }
     } = state
 
     return {
-      roomMembers,
-      roomMessages,
-      isLoading: isRoomMembersLoading || isRoomMessagesLoading
+      isLoading,
+      roomMessages
     }
   })
 
@@ -53,16 +50,13 @@ const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
     setMessage('')
   }
 
-  // Get Room Data
+  // Get Room Messages
   useEffect(() => {
-    const getRoomData = async () => {
-      await Promise.all([
-        dispatch(getRoomMembers()),
-        dispatch(getRoomMessages())
-      ])
+    // eslint-disable-next-line prettier/prettier
+    (async () => {
+      await dispatch(getRoomMessages())
       scrollToBottom()
-    }
-    getRoomData()
+    })()
 
     socketAPI().on('create-message', (message: IMessage) => {
       if (message.roomId === currentRoom.id) {
@@ -77,11 +71,7 @@ const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
   }, [roomMessages])
 
   return !isLoading ? (
-    <Wrapper>
-      <Header>
-        <RoomName>{currentRoom.name}</RoomName>
-        <RoomMembers>{roomMembers.length} members</RoomMembers>
-      </Header>
+    <>
       <Messages>
         {roomMessages.length ? (
           <>
@@ -103,29 +93,12 @@ const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
           />
         </SendMessageForm>
       </Footer>
-    </Wrapper>
+    </>
   ) : (
     <div>Loading...</div>
   )
 }
 
-const Wrapper = styled.section`
-  height: 100%;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-`
-const Header = styled.div`
-  border-bottom: 1px solid var(--light-gray);
-  padding: 18px;
-`
-const RoomName = styled.h1`
-  margin: 0 0 10px 0;
-  font-weight: 600;
-`
-const RoomMembers = styled.p`
-  margin: 0;
-`
 const Messages = styled.div`
   flex-grow: 1;
   overflow: auto;

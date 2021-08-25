@@ -31,9 +31,9 @@ const UserRooms = (): JSX.Element => {
     <Wrapper>
       <CreateWrapper>
         My Rooms
-        <CreateRoom id="create-room" onClick={() => toggleCreateRoom()}>
-          <i className="material-icons">add</i>
-        </CreateRoom>
+        <CreateRoomBtn id="create-room" onClick={() => toggleCreateRoom()}>
+          <CreateRoomIcon className="material-icons">add</CreateRoomIcon>
+        </CreateRoomBtn>
       </CreateWrapper>
 
       {!isLoading ? (
@@ -77,22 +77,19 @@ const CreateWrapper = styled.div`
   justify-content: space-between;
   padding: 30px 18px;
 `
-const CreateRoom = styled.button`
-  background: #e5e5e5;
-  line-height: 1;
+const CreateRoomBtn = styled.button`
   height: 40px;
   width: 40px;
   border-radius: 50%;
 `
+const CreateRoomIcon = styled.i``
 const Room = styled.button`
   display: flex;
   align-items: center;
   cursor: pointer;
   padding: 20px;
-  line-height: 1;
   width: 100%;
   text-align: left;
-  background: #e5e5e5;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

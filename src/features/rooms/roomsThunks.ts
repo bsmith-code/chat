@@ -42,7 +42,7 @@ export const getRoomMembers = createAsyncThunk(
   async (_, { getState }) => {
     const roomId = selectRoomId(getState() as IRootState)
 
-    return (await fetchRoomMembers(roomId)) as IMember[]
+    return (await fetchRoomMembers(roomId)) as { [key: string]: IMember[] }
   }
 )
 

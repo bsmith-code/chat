@@ -116,22 +116,31 @@ export const extraReducers = (
   builder
     .addCase(getRoomMembers.pending, state => {
       state.roomMembers = {
-        data: [],
+        data: {
+          accepted: [],
+          pending: []
+        },
         isLoading: true
       }
     })
     .addCase(
       getRoomMembers.fulfilled,
-      (state, action: PayloadAction<IMember[]>) => {
+      (state, action: PayloadAction<{ [key: string]: IMember[] }>) => {
         state.roomMembers = {
           isLoading: false,
-          data: action.payload
+          data: {
+            accepted: action.payload.accepted,
+            pending: action.payload.pending
+          }
         }
       }
     )
     .addCase(getRoomMembers.rejected, state => {
       state.roomMembers = {
-        data: [],
+        data: {
+          accepted: [],
+          pending: []
+        },
         isLoading: false
       }
     })
