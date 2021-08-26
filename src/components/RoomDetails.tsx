@@ -1,27 +1,24 @@
 import { useAppDispatch, useAppSelector } from '../store'
 import { useEffect, useState } from 'react'
-import { IRoom } from '../types'
 import styled from 'styled-components'
 import { getRoomMembers } from '../features/rooms'
 import ModalEditRoom from './ModalEditRoom'
 
-interface IProps {
-  currentRoom: IRoom
-}
-
-const RoomDetails = ({ currentRoom }: IProps): JSX.Element => {
+const RoomDetails = (): JSX.Element => {
   // Composition
   const dispatch = useAppDispatch()
-  const { roomMembers, isLoading } = useAppSelector(state => {
+  const { currentRoom, roomMembers, isLoading } = useAppSelector(state => {
     const {
       rooms: {
-        roomMembers: { data: roomMembers, isLoading }
+        roomMembers: { data: roomMembers, isLoading: isRoomMembersLoading },
+        currentRoom: { data: currentRoom, isLoading: isCurrentRoomLoading }
       }
     } = state
 
     return {
-      isLoading,
-      roomMembers
+      currentRoom,
+      roomMembers,
+      isLoading: isRoomMembersLoading || isCurrentRoomLoading
     }
   })
 
@@ -55,7 +52,10 @@ const RoomDetails = ({ currentRoom }: IProps): JSX.Element => {
       </EditRoomBtn>
 
       {isEditRoomActive ? (
-        <ModalEditRoom toggleEditRoom={toggleEditRoom} />
+        <ModalEditRoom
+          toggleEditRoom={toggleEditRoom}
+          roomDetails={{ ...currentRoom, ...roomMembers }}
+        />
       ) : null}
     </Header>
   )

@@ -39,11 +39,11 @@ const RoomCurrent = (): JSX.Element => {
       {!isLoading ? (
         <>
           {!memberStatus.acceptedAt ? (
-            <RoomJoin currentRoom={currentRoom} />
+            <RoomJoin />
           ) : (
             <RoomWrapper>
-              <RoomDetails currentRoom={currentRoom} />
-              <RoomMessages currentRoom={currentRoom} />
+              <RoomDetails />
+              <RoomMessages />
             </RoomWrapper>
           )}
         </>

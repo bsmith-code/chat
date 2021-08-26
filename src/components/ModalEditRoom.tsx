@@ -1,10 +1,19 @@
 import FormEditRoom from './FormEditRoom'
-
-type IProps = {
+import { IMember, IRoom } from '../types'
+interface IProps {
+  roomDetails: {
+    id?: string
+    name?: string
+    accepted: IMember[]
+    pending: IMember[]
+  }
   toggleEditRoom: () => void
 }
 
-const ModalEditRoom = ({ toggleEditRoom }: IProps): JSX.Element => {
+const ModalEditRoom = ({
+  roomDetails,
+  toggleEditRoom
+}: IProps): JSX.Element => {
   return (
     <section className="modal">
       <article className="modal__container">
@@ -19,7 +28,10 @@ const ModalEditRoom = ({ toggleEditRoom }: IProps): JSX.Element => {
           </button>
         </header>
         <main className="modal__main">
-          <FormEditRoom toggleEditRoom={toggleEditRoom} />
+          <FormEditRoom
+            roomDetails={roomDetails}
+            toggleEditRoom={toggleEditRoom}
+          />
         </main>
       </article>
     </section>

@@ -1,14 +1,21 @@
-import { useAppDispatch } from '../store'
+import { useAppDispatch, useAppSelector } from '../store'
 import styled from 'styled-components'
-import { IRoom } from '../types'
 import { joinRoom, getRoomMemberStatus } from '../features/rooms'
 
-interface IProps {
-  currentRoom: IRoom
-}
-
-const RoomJoin = ({ currentRoom }: IProps): JSX.Element => {
+const RoomJoin = (): JSX.Element => {
+  // Composition
   const dispatch = useAppDispatch()
+  const { currentRoom } = useAppSelector(state => {
+    const {
+      rooms: {
+        currentRoom: { data: currentRoom }
+      }
+    } = state
+
+    return {
+      currentRoom
+    }
+  })
 
   const handleClick = async () => {
     await dispatch(joinRoom())

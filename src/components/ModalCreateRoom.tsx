@@ -1,6 +1,6 @@
 import FormCreateRoom from './FormCreateRoom'
 
-type IProps = {
+interface IProps {
   toggleCreateRoom: () => void
 }
 

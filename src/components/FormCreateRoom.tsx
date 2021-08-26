@@ -2,8 +2,15 @@ import { useState, FormEvent } from 'react'
 import { useAppDispatch } from '../store'
 import { createRoom, getUserRooms } from '../features/rooms'
 
-type IProps = {
+interface IProps {
   toggleCreateRoom: () => void
+}
+interface IFormFields {
+  [key: string]: {
+    type: string
+    value: string
+    placeholder: string
+  }
 }
 
 const FormCreateRoom = ({ toggleCreateRoom }: IProps): JSX.Element => {
@@ -11,13 +18,6 @@ const FormCreateRoom = ({ toggleCreateRoom }: IProps): JSX.Element => {
   const dispatch = useAppDispatch()
 
   // Form Fields
-  interface IFormFields {
-    [key: string]: {
-      type: string
-      value: string
-      placeholder: string
-    }
-  }
   const [fields, setFields] = useState<IFormFields>({
     name: {
       value: '',
@@ -68,27 +68,23 @@ const FormCreateRoom = ({ toggleCreateRoom }: IProps): JSX.Element => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {isSubmitting ? (
-        <div>Submitting...</div>
-      ) : (
-        Object.keys(fields).map((field: string) => {
-          const { type, value, placeholder } = fields[field]
-
-          return (
-            <fieldset key={`input-${field}`}>
-              <input
-                required
-                type={type}
-                name={field}
-                value={value}
-                placeholder={placeholder}
-                onInput={event => handleInputChange(event, field)}
-              />
-            </fieldset>
-          )
-        })
-      )}
+      {Object.keys(fields).map((field: string) => {
+        const { type, value, placeholder } = fields[field]
+        return (
+          <fieldset key={`input-${field}`}>
+            <input
+              required
+              type={type}
+              name={field}
+              value={value}
+              placeholder={placeholder}
+              onInput={event => handleInputChange(event, field)}
+            />
+          </fieldset>
+        )
+      })}
       <button type="submit">Create</button>
+      {isSubmitting ? <div>Submitting...</div> : null}
     </form>
   )
 }

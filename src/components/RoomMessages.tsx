@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '../store'
-import { IMessage, IRoom } from '../types'
+import { IMessage } from '../types'
 import styled from 'styled-components'
 import {
   createMessage,
@@ -9,23 +9,22 @@ import {
 } from '../features/rooms'
 import Message from './Message'
 import { socketAPI } from '../clients'
-interface IProps {
-  currentRoom: IRoom
-}
 
-const RoomMessages = ({ currentRoom }: IProps): JSX.Element => {
+const RoomMessages = (): JSX.Element => {
   // Composition
   const dispatch = useAppDispatch()
-  const { roomMessages, isLoading } = useAppSelector(state => {
+  const { currentRoom, roomMessages, isLoading } = useAppSelector(state => {
     const {
       rooms: {
-        roomMessages: { data: roomMessages, isLoading }
+        currentRoom: { data: currentRoom, isLoading: isCurrentRoomLoading },
+        roomMessages: { data: roomMessages, isLoading: isRoomMessagesLoading }
       }
     } = state
 
     return {
-      isLoading,
-      roomMessages
+      currentRoom,
+      roomMessages,
+      isLoading: isCurrentRoomLoading || isRoomMessagesLoading
     }
   })
 

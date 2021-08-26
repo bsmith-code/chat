@@ -34,3 +34,11 @@ export interface IMessage {
     lastName?: string
   }
 }
+
+export interface IFormFields {
+  [key: string]: {
+    label: string
+    type: string
+    value: string | IMember[]
+  }
+}
