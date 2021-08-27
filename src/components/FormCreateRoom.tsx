@@ -31,7 +31,7 @@ const FormCreateRoom = ({ toggleCreateRoom }: IProps): JSX.Element => {
     }
   })
 
-  const handleInputChange = (event: FormEvent, field: string) => {
+  const handleInput = (event: FormEvent, field: string) => {
     const { value } = event.target as HTMLInputElement
 
     setFields({
@@ -78,7 +78,7 @@ const FormCreateRoom = ({ toggleCreateRoom }: IProps): JSX.Element => {
               name={field}
               value={value}
               placeholder={placeholder}
-              onInput={event => handleInputChange(event, field)}
+              onInput={event => handleInput(event, field)}
             />
           </fieldset>
         )

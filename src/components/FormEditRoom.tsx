@@ -23,7 +23,7 @@ const FormEditRoom = ({ toggleEditRoom, roomDetails }: IProps): JSX.Element => {
     componentMap,
     isSubmitting,
     setIsSubmitting,
-    handleInputChange
+    handleInput
   } = useFormOptions()
 
   // Form Fields
@@ -37,12 +37,12 @@ const FormEditRoom = ({ toggleEditRoom, roomDetails }: IProps): JSX.Element => {
       members: {
         label: 'Room Members:',
         value: roomDetails.accepted ?? [],
-        type: 'typeAheadMulti'
+        type: 'memberMulti'
       },
       pending: {
         label: 'Pending Invites:',
         value: roomDetails.pending ?? [],
-        type: 'typeAheadMulti'
+        type: 'memberMulti'
       }
     })
   }, [])
@@ -84,7 +84,7 @@ const FormEditRoom = ({ toggleEditRoom, roomDetails }: IProps): JSX.Element => {
             <Component
               name={name}
               field={{ type, value, label }}
-              handleInputChange={handleInputChange}
+              handleInput={handleInput}
             />
           </Suspense>
         )

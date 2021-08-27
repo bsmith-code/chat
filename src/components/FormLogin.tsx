@@ -31,7 +31,7 @@ const LoginForm = () => {
     }
   })
 
-  const handleInputChange = (event: FormEvent, field: string) => {
+  const handleInput = (event: FormEvent, field: string) => {
     const { value } = event.target as HTMLInputElement
 
     setFields({
@@ -81,7 +81,7 @@ const LoginForm = () => {
                 name={field}
                 value={value}
                 placeholder={placeholder}
-                onInput={event => handleInputChange(event, field)}
+                onInput={event => handleInput(event, field)}
               />
             </fieldset>
           )

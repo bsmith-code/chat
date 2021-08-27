@@ -1,24 +1,16 @@
-import { FormEvent } from 'react'
+import InputLabel from './InputLabel'
+import { IInputProps } from '../types'
 
-interface IProps {
-  name: string
-  field: {
-    type: string
-    value: string
-    label: string
-  }
-  handleInputChange: (event: FormEvent, name: string) => void
-}
-
-const InputText = ({ name, field, handleInputChange }: IProps): JSX.Element => {
+const InputText = ({ name, field, handleInput }: IInputProps): JSX.Element => {
   return (
     <fieldset>
+      <InputLabel label={field.label} />
       <input
         required
         name={name}
         type={field.type}
         value={field.value}
-        onInput={event => handleInputChange(event, name)}
+        onInput={event => handleInput(event, name)}
       />
     </fieldset>
   )

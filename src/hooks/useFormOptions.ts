@@ -11,7 +11,7 @@ const useFormOptions = () => {
   const [fields, setFields] = useState<IFormFields>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleInputChange = (event: FormEvent, name: string): void => {
+  const handleInput = (event: FormEvent, name: string): void => {
     const { value } = event.target as HTMLInputElement
 
     setFields({
@@ -28,7 +28,7 @@ const useFormOptions = () => {
   } = {
     text: lazy(() => import('../components/InputText')),
     textArea: lazy(() => import('../components/InputTextArea')),
-    typeAheadMulti: lazy(() => import('../components/InputTypeAheadMulti'))
+    memberMulti: lazy(() => import('../components/InputMemberMulti'))
   }
 
   return {
@@ -37,7 +37,7 @@ const useFormOptions = () => {
     componentMap,
     isSubmitting,
     setIsSubmitting,
-    handleInputChange
+    handleInput
   }
 }
 

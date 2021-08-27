@@ -36,7 +36,7 @@ const RoomMessages = (): JSX.Element => {
 
   // Handle Input Change
   const [message, setMessage] = useState('')
-  const handleInputChange = (event: KeyboardEvent) => {
+  const handleInput = (event: KeyboardEvent) => {
     const { value } = event.target as HTMLInputElement
 
     setMessage(value)
@@ -85,11 +85,7 @@ const RoomMessages = (): JSX.Element => {
       </Messages>
       <Footer>
         <SendMessageForm onSubmit={handleSubmit}>
-          <SendMessage
-            type="text"
-            value={message}
-            onInput={handleInputChange}
-          />
+          <SendMessage type="text" value={message} onInput={handleInput} />
         </SendMessageForm>
       </Footer>
     </>

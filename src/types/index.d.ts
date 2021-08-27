@@ -42,3 +42,13 @@ export interface IFormFields {
     value: string | IMember[]
   }
 }
+
+export interface IInputProps {
+  name: string
+  field: {
+    type: string
+    value: string
+    label: string
+  }
+  handleInput: (event: FormEvent, name: string) => void
+}
