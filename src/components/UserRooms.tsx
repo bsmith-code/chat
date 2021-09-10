@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useAppDispatch } from '../store'
+import { useAppDispatch, useAppSelector } from '../store'
 import styled from 'styled-components'
 import ModalCreateRoom from './ModalCreateRoom'
 import { IRoom } from '../types'
@@ -9,7 +8,7 @@ import { getUserRooms, setCurrentRoom } from '../features/rooms'
 const UserRooms = (): JSX.Element => {
   // Composition
   const dispatch = useAppDispatch()
-  const { data: userRooms, isLoading } = useSelector(
+  const { data: userRooms, isLoading } = useAppSelector(
     (state: any) => state.rooms.userRooms
   )
 
