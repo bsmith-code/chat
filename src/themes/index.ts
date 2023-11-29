@@ -2,16 +2,17 @@ import { createTheme } from '@mui/material'
 
 export const lightTheme = createTheme({
   typography: {
+    // fontSize: 12,
     fontFamily: 'Open Sans',
     fontWeightMedium: 600
   },
   palette: {
     mode: 'light',
     primary: {
-      main: '#05c3f9'
+      main: '#7ebaeb'
     },
     secondary: {
-      main: '#282826'
+      main: '#efefef'
     }
   }
 })

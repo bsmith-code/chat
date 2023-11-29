@@ -3,20 +3,13 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env?.REACT_APP_API_URL ?? ''}/v2`,
-    prepareHeaders: headers => {
-      const apiKey = process.env?.REACT_APP_API_KEY ?? ''
-
-      if (apiKey) {
-        headers.set('Authorization', `Bearer ${apiKey}`)
-      }
-    }
+    baseUrl: `${process.env?.REACT_APP_API_BASE_URL ?? ''}/v1/chat`,
+    credentials: 'include'
   }),
-
   endpoints: build => ({
-    // getQuotes: build.query<IQuotesResponse, void>({
-    //   query: () => 'quote'
-    // }),
+    getRooms: build.query<unknown, void>({
+      query: () => 'rooms'
+    })
     // getCharacters: build.query<ICharacterResponse, void>({
     //   query: () => 'character'
     // }),
@@ -26,4 +19,11 @@ const api = createApi({
   })
 })
 
-export const { util, reducer, endpoints, middleware, reducerPath } = api
+export const {
+  util,
+  reducer,
+  endpoints,
+  middleware,
+  reducerPath,
+  useGetRoomsQuery
+} = api

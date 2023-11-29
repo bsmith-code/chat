@@ -1,5 +1,5 @@
 {
-  "name": "plantbid-codescreen",
+  "name": "chat",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -33,6 +33,7 @@
     "@typescript-eslint/parser": "^5.0.0",
     "@vitejs/plugin-react": "^4.1.1",
     "dotenv": "^16.3.1",
+    "dotenv-cli": "^7.3.0",
     "eslint": "^8.43.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
@@ -59,8 +60,8 @@
     "vite-tsconfig-paths": "^4.0.7"
   },
   "scripts": {
-    "start": "vite",
-    "build": "vite build",
+    "start": "dotenv -e .env.local vite",
+    "build": "dotenv -e .env.prod vite build",
     "test": "jest --updateSnapshot --watchAll=false --logHeapUsage --maxWorkers=50%"
   },
   "browserslist": [
