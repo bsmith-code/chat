@@ -1,27 +1,15 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
-import app from '../features/app'
-import auth from '../features/auth'
-import rooms from '../features/rooms'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
-const reducer = {
-  app,
-  auth,
-  rooms
-}
+import { middleware, reducer, reducerPath } from 'store/server'
 
-const store = configureStore({
-  reducer,
-  devTools: process.env.NODE_ENV !== 'production',
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat()
+export const combinedReducers = combineReducers({
+  [reducerPath]: reducer
 })
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type IRootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
-
-// Export a hook that can be reused to resolve types
-export const useAppDispatch = () => useDispatch<AppDispatch>()
-export const useAppSelector: TypedUseSelectorHook<IRootState> = useSelector
+const store = configureStore({
+  reducer: combinedReducers,
+  devTools: process.env.NODE_ENV !== 'production',
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middleware)
+})
 
 export default store
