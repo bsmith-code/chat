@@ -1,31 +1,28 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "baseUrl": "src",
+    "target": "esnext",
     "lib": [
-      "es6",
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    "strict": true,
-    "noEmit": true,
+    "types": ["vite/client"],
     "allowJs": true,
-    "jsx": "react-jsx",
-    "module": "esnext",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "moduleResolution": "node",
-    "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
+    "src", "vite.config.ts", ".eslintrc.cjs", "jest.config.ts"
   ]
 }
