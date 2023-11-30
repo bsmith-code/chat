@@ -2,13 +2,16 @@ import { useState } from 'react'
 import { mockMessages, mockRooms } from '__mocks__/rooms'
 import { LayoutDefault } from 'layouts/LayoutDefault'
 
-import { useGetRoomsQuery } from 'store/server'
+import { useGetRoomsQuery, useSessionQuery } from 'store/server'
 
+import EditIcon from '@mui/icons-material/Edit'
 import {
+  Avatar,
   Box,
   Button,
   Card,
   Divider,
+  IconButton,
   List,
   ListItemAvatar,
   ListItemButton,
@@ -18,38 +21,19 @@ import {
   Typography
 } from '@mui/material'
 
-export const App = () => {
-  const { data: rooms = [] } = useGetRoomsQuery()
-  const [selectedRoom, setSelectedRoom] = useState('')
+import { ListRooms } from 'components/ListRooms'
+import { RoomCreate } from 'components/RoomCreate'
+import { UserProfile } from 'components/UserProfile'
 
-  const handleClickRoom = (id: string) => {
-    setSelectedRoom(id)
-    // get rooms/{id}/messages
-  }
+export const App = () => {
+  const { data: currentUser } = useSessionQuery()
 
   return (
     <LayoutDefault>
       <Box component={Paper} flexBasis={400} overflow="auto">
-        <Box>Current User</Box>
-        <List>
-          {rooms.map(({ id, name, members, messages }) => (
-            <>
-              <ListItemButton
-                key={`room-${id}`}
-                onClick={() => handleClickRoom(id)}
-              >
-                <ListItemAvatar>AG</ListItemAvatar>
-                <ListItemText>
-                  <Typography variant="subtitle2">{name}</Typography>
-                  <Typography>
-                    {messages?.[0]?.message ?? 'No new messages'}
-                  </Typography>
-                </ListItemText>
-              </ListItemButton>
-              <Divider />
-            </>
-          ))}
-        </List>
+        <UserProfile user={currentUser} />
+        <RoomCreate />
+        <ListRooms />
       </Box>
       <Box flexGrow={1} display="flex" flexDirection="column">
         <Box overflow="auto" p={2}>
