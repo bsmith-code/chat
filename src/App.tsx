@@ -19,7 +19,7 @@ import {
 } from '@mui/material'
 
 export const App = () => {
-  const { data } = useGetRoomsQuery()
+  const { data: rooms = [] } = useGetRoomsQuery()
   const [selectedRoom, setSelectedRoom] = useState('')
 
   const handleClickRoom = (id: string) => {
@@ -32,24 +32,29 @@ export const App = () => {
       <Box component={Paper} flexBasis={400} overflow="auto">
         <Box>Current User</Box>
         <List>
-          {mockRooms.map(({ id, name, members, messages }) => (
-            <ListItemButton
-              key={`room-${id}`}
-              onClick={() => handleClickRoom(id)}
-            >
-              <ListItemAvatar>AG</ListItemAvatar>
-              <ListItemText>
-                <Typography variant="subtitle2">{name}</Typography>
-                <Typography>{messages[0].message}</Typography>
-              </ListItemText>
-            </ListItemButton>
+          {rooms.map(({ id, name, members, messages }) => (
+            <>
+              <ListItemButton
+                key={`room-${id}`}
+                onClick={() => handleClickRoom(id)}
+              >
+                <ListItemAvatar>AG</ListItemAvatar>
+                <ListItemText>
+                  <Typography variant="subtitle2">{name}</Typography>
+                  <Typography>
+                    {messages?.[0]?.message ?? 'No new messages'}
+                  </Typography>
+                </ListItemText>
+              </ListItemButton>
+              <Divider />
+            </>
           ))}
         </List>
       </Box>
       <Box flexGrow={1} display="flex" flexDirection="column">
         <Box overflow="auto" p={2}>
-          {mockMessages.map(({ id, message, userId, createdAt }) => {
-            const isOwnMessage = userId === 'user-1'
+          {mockMessages.map(({ id, message, user, createdAt }) => {
+            const isOwnMessage = user.id === 'user-1'
 
             return (
               <Box
@@ -63,6 +68,7 @@ export const App = () => {
                     ? {
                         float: 'right',
                         color: 'white',
+                        clear: 'both',
                         backgroundColor: theme.palette.primary.main
                       }
                     : {

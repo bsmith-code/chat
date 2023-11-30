@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+import { IRoom } from 'types/room'
+
 const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
@@ -7,7 +9,7 @@ const api = createApi({
     credentials: 'include'
   }),
   endpoints: build => ({
-    getRooms: build.query<unknown, void>({
+    getRooms: build.query<IRoom[], void>({
       query: () => 'rooms'
     })
     // getCharacters: build.query<ICharacterResponse, void>({
