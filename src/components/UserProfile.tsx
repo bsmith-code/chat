@@ -1,16 +1,20 @@
+import { shallowEqual } from 'react-redux'
+
+import { selectUser } from 'store/server'
+
 import EditIcon from '@mui/icons-material/Edit'
 import { Avatar, Box, IconButton, Typography } from '@mui/material'
 
-import { IUser } from 'types/room'
+import { useAppSelector } from 'hooks/useRedux'
 
-interface IProps {
-  user?: IUser
-}
-export const UserProfile = ({ user }: IProps) => {
-  const { firstName = '', lastName = '', email = '' } = user ?? {}
+import { getFullName, getInitials } from 'utils'
 
-  const fullName = `${firstName} ${lastName}`
-  const initials = `${firstName?.slice(0, 1)}${lastName?.slice(0, 1)}`
+export const UserProfile = () => {
+  const user = useAppSelector(selectUser, shallowEqual)
+  const { email = '' } = user ?? {}
+
+  const fullName = getFullName(user)
+  const initials = getInitials(user)
 
   return (
     <Box display="flex" p={4} justifyContent="space-between">

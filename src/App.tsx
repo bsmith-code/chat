@@ -26,12 +26,12 @@ import { RoomCreate } from 'components/RoomCreate'
 import { UserProfile } from 'components/UserProfile'
 
 export const App = () => {
-  const { data: currentUser } = useSessionQuery()
+  useSessionQuery()
 
   return (
     <LayoutDefault>
       <Box component={Paper} flexBasis={400} overflow="auto">
-        <UserProfile user={currentUser} />
+        <UserProfile />
         <RoomCreate />
         <ListRooms />
       </Box>

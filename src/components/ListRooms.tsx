@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useGetRoomsQuery } from 'store/server'
 
 import {
+  Box,
   Divider,
   List,
   ListItemAvatar,
@@ -20,7 +21,7 @@ export const ListRooms = () => {
     // get rooms/{id}/messages
   }
 
-  return (
+  return rooms.length ? (
     <List>
       {rooms.map(({ id, name, members, messages }) => (
         <>
@@ -40,5 +41,9 @@ export const ListRooms = () => {
         </>
       ))}
     </List>
+  ) : (
+    <Box p={3} textAlign="center">
+      <Typography>Create a room to start chatting!</Typography>
+    </Box>
   )
 }

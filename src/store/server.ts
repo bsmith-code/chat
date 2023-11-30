@@ -12,6 +12,9 @@ export const authApi = createApi({
   endpoints: build => ({
     session: build.query<IUser, void>({
       query: () => 'session'
+    }),
+    getUsers: build.query<IUser[], void>({
+      query: () => 'users'
     })
   })
 })
@@ -46,7 +49,7 @@ export const chatApi = createApi({
 })
 
 export const { useGetRoomsQuery, useCreateRoomMutation } = chatApi
-export const { useSessionQuery } = authApi
+export const { useSessionQuery, useGetUsersQuery } = authApi
 
 export const selectUser = (state: IRootState) =>
-  authApi.endpoints.session.select()(state).data
+  authApi.endpoints.session.select()(state).data ?? ({} as IUser)

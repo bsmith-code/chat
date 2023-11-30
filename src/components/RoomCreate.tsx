@@ -1,53 +1,65 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { shallowEqual } from 'react-redux'
 
-import { selectUser, useCreateRoomMutation } from 'store/server'
+import {
+  selectUser,
+  useCreateRoomMutation,
+  useGetUsersQuery
+} from 'store/server'
 
 import {
   Autocomplete,
   Box,
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  ListItemButton,
   TextField
 } from '@mui/material'
 
 import { useAppSelector } from 'hooks/useRedux'
 
+import { getFullName } from 'utils'
+
+import { IUser } from 'types/room'
+
+interface IRoomForm {
+  name: string
+  members: IUser[]
+}
 export const RoomCreate = () => {
+  const [isCreatingRoom, setIsCreatingRoom] = useState(false)
   const [createRoom] = useCreateRoomMutation()
 
-  const { control, handleSubmit } = useForm({
+  const currentUser = useAppSelector(selectUser, shallowEqual)
+  const { users } = useGetUsersQuery(undefined, {
+    skip: !isCreatingRoom,
+    selectFromResult: ({ data = [] }) => ({
+      users: data?.filter(({ id }) => id !== currentUser.id)
+    })
+  })
+
+  const { control, handleSubmit, reset } = useForm<IRoomForm>({
     defaultValues: {
       name: '',
       members: []
     }
   })
 
-  const currentUser = useAppSelector(selectUser, shallowEqual)
-
-  const [isCreatingRoom, setIsCreatingRoom] = useState(false)
-
   const handleOpenDialog = () => {
     setIsCreatingRoom(true)
   }
   const handleCloseDialog = () => {
     setIsCreatingRoom(false)
+    reset()
   }
 
-  const onSubmit = async ({
-    name,
-    members
-  }: {
-    name: string
-    members: string[]
-  }) => {
-    const preparedMembers = currentUser ? [...members, currentUser.id] : members
-
-    await createRoom({ name, members: preparedMembers })
+  const onSubmit = async ({ name, members }: IRoomForm) => {
+    await createRoom({ name, members: members.map(({ id }) => id) })
     handleCloseDialog()
   }
 
@@ -76,9 +88,41 @@ export const RoomCreate = () => {
             )}
           />
 
-          <Autocomplete
-            options={[]}
-            renderInput={params => <TextField {...params} label="Members" />}
+          <Controller
+            name="members"
+            control={control}
+            render={({ field }) => (
+              <Autocomplete
+                multiple
+                onChange={(_, value) => {
+                  field.onChange(value)
+                }}
+                value={field.value}
+                options={users}
+                getOptionLabel={user => getFullName(user)}
+                renderTags={(value, getTagProps) =>
+                  value.map((user, index) => (
+                    <Chip
+                      label={getFullName(user)}
+                      {...getTagProps({ index })}
+                    />
+                  ))
+                }
+                renderOption={(props, option) => (
+                  <ListItemButton
+                    {...props}
+                    component="li"
+                    key={`user-${option.id}`}
+                    data-testid={`user-${option.id}`}
+                  >
+                    {option.firstName}
+                  </ListItemButton>
+                )}
+                renderInput={params => (
+                  <TextField {...params} label="Members" />
+                )}
+              />
+            )}
           />
         </DialogContent>
 
