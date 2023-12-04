@@ -1,12 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import io from 'socket.io-client'
 
 import { IRootState } from 'types/redux'
-import { IRoom, IUser } from 'types/room'
+import { IMessage, IMessageCreate, IRoom, IUser } from 'types/room'
+
+const baseUrl = process.env?.REACT_APP_API_BASE_URL ?? ''
 
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env?.REACT_APP_API_BASE_URL ?? ''}/v1/auth`,
+    baseUrl: `${baseUrl}/v1/auth`,
     credentials: 'include'
   }),
   endpoints: build => ({
@@ -22,7 +25,7 @@ export const authApi = createApi({
 export const chatApi = createApi({
   reducerPath: 'chatApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env?.REACT_APP_API_BASE_URL ?? ''}/v1/chat`,
+    baseUrl: `${baseUrl}/v1/chat`,
     credentials: 'include'
   }),
   tagTypes: ['IRoom'],
@@ -38,6 +41,49 @@ export const chatApi = createApi({
         body
       }),
       invalidatesTags: ['IRoom']
+    }),
+    getRoomMessages: build.query<IMessage[], string>({
+      query: id => `rooms/${id}/messages`
+    }),
+    createMessage: build.mutation<IMessage, IMessageCreate>({
+      query: body => ({
+        url: `messages`,
+        method: 'POST',
+        body
+      }),
+      async onCacheEntryAdded(
+        arg,
+        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
+      ) {
+        // create a websocket connection when the cache subscription starts
+        const socket = io(baseUrl)
+
+        try {
+          // wait for the initial query to resolve before proceeding
+          await cacheDataLoaded
+
+          // when data is received from the socket connection to the server,
+          // if it is a message and for the appropriate channel,
+          // update our query result with the received message
+          const listener = (event: MessageEvent<IMessage>) => {
+            const { data } = event
+            if (!isMessage(data) || data.channel !== arg) return
+
+            updateCachedData(draft => {
+              draft.push(data)
+            })
+          }
+
+          socket.on('message', listener)
+        } catch {
+          // no-op in case `cacheEntryRemoved` resolves before `cacheDataLoaded`,
+          // in which case `cacheDataLoaded` will throw
+        }
+        // cacheEntryRemoved will resolve when the cache subscription is no longer active
+        await cacheEntryRemoved
+        // perform cleanup steps once the `cacheEntryRemoved` promise resolves
+        socket.close()
+      }
     })
     // getCharacters: build.query<ICharacterResponse, void>({
     //   query: () => 'character'
@@ -48,7 +94,12 @@ export const chatApi = createApi({
   })
 })
 
-export const { useGetRoomsQuery, useCreateRoomMutation } = chatApi
+export const {
+  useGetRoomsQuery,
+  useCreateRoomMutation,
+  useCreateMessageMutation,
+  useGetRoomMessagesQuery
+} = chatApi
 export const { useSessionQuery, useGetUsersQuery } = authApi
 
 export const selectUser = (state: IRootState) =>

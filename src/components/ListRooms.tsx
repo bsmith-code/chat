@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { updateCurrentRoomId } from 'store/client'
 import { useGetRoomsQuery } from 'store/server'
 
 import {
@@ -12,13 +13,14 @@ import {
   Typography
 } from '@mui/material'
 
+import { useAppDispatch } from 'hooks/useRedux'
+
 export const ListRooms = () => {
+  const dispatch = useAppDispatch()
   const { data: rooms = [] } = useGetRoomsQuery()
-  const [selectedRoom, setSelectedRoom] = useState('')
 
   const handleClickRoom = (id: string) => {
-    setSelectedRoom(id)
-    // get rooms/{id}/messages
+    dispatch(updateCurrentRoomId(id))
   }
 
   return rooms.length ? (

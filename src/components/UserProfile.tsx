@@ -25,9 +25,9 @@ export const UserProfile = () => {
           <Typography fontSize={12}>{email}</Typography>
         </Box>
       </Box>
-      <IconButton>
+      {/* <IconButton>
         <EditIcon />
-      </IconButton>
+      </IconButton> */}
     </Box>
   )
 }

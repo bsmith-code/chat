@@ -4,12 +4,13 @@ export const mockMessages: IMessage[] = Array.from({ length: 20 }).map(
   (_, idx) => ({
     id: `message-${idx}`,
     message: `This is message ${idx}`,
-    user: {
-      id: idx % 2 === 0 ? `user-1` : `user-2`,
-      firstName: 'Mock First',
-      lastName: 'Mock Last',
-      email: `email+1@email.com`
-    },
+    userId: idx % 2 === 0 ? `user-1` : `user-2`,
+    // user: {
+    //   id: idx % 2 === 0 ? `user-1` : `user-2`,
+    //   firstName: 'Mock First',
+    //   lastName: 'Mock Last',
+    //   email: `email+1@email.com`
+    // },
     createdAt: '2021-08-18T18:04:46.766Z'
   })
 )
