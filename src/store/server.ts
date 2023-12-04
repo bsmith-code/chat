@@ -43,14 +43,7 @@ export const chatApi = createApi({
       invalidatesTags: ['IRoom']
     }),
     getRoomMessages: build.query<IMessage[], string>({
-      query: id => `rooms/${id}/messages`
-    }),
-    createMessage: build.mutation<IMessage, IMessageCreate>({
-      query: body => ({
-        url: `messages`,
-        method: 'POST',
-        body
-      }),
+      query: id => `rooms/${id}/messages`,
       async onCacheEntryAdded(
         arg,
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
@@ -65,12 +58,11 @@ export const chatApi = createApi({
           // when data is received from the socket connection to the server,
           // if it is a message and for the appropriate channel,
           // update our query result with the received message
-          const listener = (event: MessageEvent<IMessage>) => {
-            const { data } = event
-            if (!isMessage(data) || data.channel !== arg) return
+          const listener = (message: IMessage) => {
+            if (message.roomId !== arg) return
 
             updateCachedData(draft => {
-              draft.push(data)
+              draft.push(message)
             })
           }
 
@@ -84,13 +76,14 @@ export const chatApi = createApi({
         // perform cleanup steps once the `cacheEntryRemoved` promise resolves
         socket.close()
       }
+    }),
+    createMessage: build.mutation<IMessage, IMessageCreate>({
+      query: body => ({
+        url: `messages`,
+        method: 'POST',
+        body
+      })
     })
-    // getCharacters: build.query<ICharacterResponse, void>({
-    //   query: () => 'character'
-    // }),
-    // getCharacterQuote: build.query<IQuotesResponse, string>({
-    //   query: id => `character/${id}/quote`
-    // })
   })
 })
 

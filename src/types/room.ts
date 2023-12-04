@@ -8,6 +8,7 @@ export interface IUser {
 export interface IMessage {
   id: string
   message: string
+  roomId: string
   userId: string
   createdAt: string
 }

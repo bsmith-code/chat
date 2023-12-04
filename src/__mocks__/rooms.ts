@@ -5,6 +5,7 @@ export const mockMessages: IMessage[] = Array.from({ length: 20 }).map(
     id: `message-${idx}`,
     message: `This is message ${idx}`,
     userId: idx % 2 === 0 ? `user-1` : `user-2`,
+    roomId: idx % 2 === 0 ? `room-1` : `room-2`,
     // user: {
     //   id: idx % 2 === 0 ? `user-1` : `user-2`,
     //   firstName: 'Mock First',
