@@ -48,16 +48,11 @@ export const chatApi = createApi({
         arg,
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
       ) {
-        // create a websocket connection when the cache subscription starts
         const socket = io(baseUrl)
 
         try {
-          // wait for the initial query to resolve before proceeding
           await cacheDataLoaded
 
-          // when data is received from the socket connection to the server,
-          // if it is a message and for the appropriate channel,
-          // update our query result with the received message
           const listener = (message: IMessage) => {
             if (message.roomId !== arg) return
 
@@ -71,9 +66,8 @@ export const chatApi = createApi({
           // no-op in case `cacheEntryRemoved` resolves before `cacheDataLoaded`,
           // in which case `cacheDataLoaded` will throw
         }
-        // cacheEntryRemoved will resolve when the cache subscription is no longer active
+
         await cacheEntryRemoved
-        // perform cleanup steps once the `cacheEntryRemoved` promise resolves
         socket.close()
       }
     }),
