@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import io from 'socket.io-client'
 
 import { IRootState } from 'types/redux'
-import { IMessage, IMessageCreate, IRoom, IUser } from 'types/room'
+import { IMessage, IMessageCreate, IRoom, IRoomCreate, IUser } from 'types/room'
 
 const baseUrl = process.env?.REACT_APP_API_BASE_URL ?? ''
 
@@ -34,7 +34,7 @@ export const chatApi = createApi({
       query: () => 'rooms',
       providesTags: ['IRoom']
     }),
-    createRoom: build.mutation<IRoom, { name: string; members: string[] }>({
+    createRoom: build.mutation<IRoom, IRoomCreate>({
       query: body => ({
         url: 'rooms',
         method: 'POST',

@@ -102,7 +102,11 @@ export const PanelMessages = () => {
           onChange={handleInputMessage}
           value={userMessage}
         />
-        <Button variant="contained" type="submit">
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{ flexShrink: 0, ml: 2, color: '#fff' }}
+        >
           Submit
         </Button>
       </Box>

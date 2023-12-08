@@ -6,7 +6,6 @@ import {
   Box,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
   Paper,
   Typography

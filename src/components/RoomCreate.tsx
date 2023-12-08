@@ -25,12 +25,8 @@ import { useAppSelector } from 'hooks/useRedux'
 
 import { getFullName } from 'utils'
 
-import { IUser } from 'types/room'
+import { IRoomForm } from 'types/room'
 
-interface IRoomForm {
-  name: string
-  members: IUser[]
-}
 export const RoomCreate = () => {
   const [isCreatingRoom, setIsCreatingRoom] = useState(false)
   const [createRoom] = useCreateRoomMutation()
@@ -45,7 +41,6 @@ export const RoomCreate = () => {
 
   const { control, handleSubmit, reset } = useForm<IRoomForm>({
     defaultValues: {
-      name: '',
       members: []
     }
   })
@@ -80,7 +75,7 @@ export const RoomCreate = () => {
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
-                label="Name"
+                label="Name (optional)"
                 fullWidth
                 sx={{ mb: 2 }}
                 helperText={error?.message}

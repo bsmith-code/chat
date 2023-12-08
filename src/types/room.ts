@@ -24,3 +24,12 @@ export interface IRoom {
   members: IUser[]
   messages: IMessage[]
 }
+
+export interface IRoomForm {
+  name?: string
+  members: IUser[]
+}
+export interface IRoomCreate {
+  name?: string
+  members: string[]
+}
