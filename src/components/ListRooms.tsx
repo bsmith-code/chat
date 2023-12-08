@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { shallowEqual } from 'react-redux'
 
 import { updateCurrentRoomId } from 'store/client'
@@ -17,7 +16,7 @@ import {
 
 import { useAppDispatch, useAppSelector } from 'hooks/useRedux'
 
-import { getInitials } from 'utils'
+import { getRoomName, getUserInitials } from 'utils'
 
 export const ListRooms = () => {
   const dispatch = useAppDispatch()
@@ -34,8 +33,7 @@ export const ListRooms = () => {
         const preparedMembers = members.filter(
           ({ id: memberId }) => memberId !== currentUser.id
         )
-        const preparedRoomName =
-          name || preparedMembers.map(({ firstName }) => firstName).join(', ')
+        const preparedRoomName = getRoomName(preparedMembers, name)
         return (
           <>
             <ListItemButton
@@ -45,7 +43,7 @@ export const ListRooms = () => {
               <AvatarGroup max={3} total={preparedMembers.length}>
                 {preparedMembers.map(member => (
                   <Avatar key={`avatar-${member.id}`}>
-                    {getInitials(member)}
+                    {getUserInitials(member)}
                   </Avatar>
                 ))}
               </AvatarGroup>

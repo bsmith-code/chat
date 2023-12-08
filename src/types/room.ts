@@ -20,7 +20,7 @@ export interface IMessageCreate {
 
 export interface IRoom {
   id: string
-  name: string
+  name?: string
   members: IUser[]
   messages: IMessage[]
 }

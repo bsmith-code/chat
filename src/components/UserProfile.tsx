@@ -7,14 +7,14 @@ import { Avatar, Box, IconButton, Typography } from '@mui/material'
 
 import { useAppSelector } from 'hooks/useRedux'
 
-import { getFullName, getInitials } from 'utils'
+import { getUserFullName, getUserInitials } from 'utils'
 
 export const UserProfile = () => {
   const user = useAppSelector(selectUser, shallowEqual)
   const { email = '' } = user ?? {}
 
-  const fullName = getFullName(user)
-  const initials = getInitials(user)
+  const fullName = getUserFullName(user)
+  const initials = getUserInitials(user)
 
   return (
     <Box display="flex" p={4} justifyContent="space-between">

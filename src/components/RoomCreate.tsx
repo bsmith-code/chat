@@ -23,7 +23,7 @@ import {
 
 import { useAppSelector } from 'hooks/useRedux'
 
-import { getFullName } from 'utils'
+import { getUserFullName } from 'utils'
 
 import { IRoomForm } from 'types/room'
 
@@ -94,11 +94,11 @@ export const RoomCreate = () => {
                 }}
                 value={field.value}
                 options={users}
-                getOptionLabel={user => getFullName(user)}
+                getOptionLabel={user => getUserFullName(user)}
                 renderTags={(value, getTagProps) =>
                   value.map((user, index) => (
                     <Chip
-                      label={getFullName(user)}
+                      label={getUserFullName(user)}
                       {...getTagProps({ index })}
                     />
                   ))

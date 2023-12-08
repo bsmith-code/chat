@@ -13,7 +13,7 @@ import {
 
 import { useAppSelector } from 'hooks/useRedux'
 
-import { getFullName, getInitials } from 'utils'
+import { getUserFullName, getUserInitials } from 'utils'
 
 export const PanelDetails = () => {
   const currentRoomId = useAppSelector(selectCurrentRoomId)
@@ -29,7 +29,7 @@ export const PanelDetails = () => {
   return (
     <Box component={Paper} flexBasis={400} overflow="auto" p={4}>
       <Box mb={4}>
-        <Typography fontSize={14}>Room:</Typography>
+        <Typography fontSize={14}>Name:</Typography>
         <Typography variant="h5">{name}</Typography>
       </Box>
 
@@ -39,9 +39,9 @@ export const PanelDetails = () => {
           <List>
             {members.map(member => (
               <ListItem>
-                <Avatar>{getInitials(member)}</Avatar>
+                <Avatar>{getUserInitials(member)}</Avatar>
                 <ListItemText sx={{ ml: 2 }}>
-                  {getFullName(member)}
+                  {getUserFullName(member)}
                 </ListItemText>
               </ListItem>
             ))}
