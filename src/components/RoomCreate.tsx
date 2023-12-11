@@ -41,6 +41,8 @@ export const RoomCreate = () => {
 
   const { control, handleSubmit, reset } = useForm<IRoomForm>({
     defaultValues: {
+      name: '',
+      description: '',
       members: []
     }
   })
@@ -53,8 +55,13 @@ export const RoomCreate = () => {
     reset()
   }
 
-  const onSubmit = async ({ name, members }: IRoomForm) => {
-    await createRoom({ name, members: members.map(({ id }) => id) })
+  const onSubmit = async (data: IRoomForm) => {
+    const preparedData = {
+      ...data,
+      members: data.members.map(({ id }) => id)
+    }
+
+    await createRoom(preparedData)
     handleCloseDialog()
   }
 
@@ -76,6 +83,20 @@ export const RoomCreate = () => {
               <TextField
                 {...field}
                 label="Name (optional)"
+                fullWidth
+                sx={{ mb: 2 }}
+                helperText={error?.message}
+              />
+            )}
+          />
+
+          <Controller
+            name="description"
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <TextField
+                {...field}
+                label="Description (optional)"
                 fullWidth
                 sx={{ mb: 2 }}
                 helperText={error?.message}

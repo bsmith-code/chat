@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { BaseSyntheticEvent, Dispatch, SetStateAction, useState } from 'react'
 import { useController, UseFormReturn } from 'react-hook-form'
 import isPropValid from '@emotion/is-prop-valid'
 
@@ -55,20 +55,22 @@ interface IProps {
   name: 'name' | 'description'
   label: string
   focusedField: string
-  onFocusedField: (fieldName: 'name' | 'description') => void
+  setFocusedField: Dispatch<SetStateAction<string>>
   form: UseFormReturn<IRoomForm>
+  onSubmit: (e: BaseSyntheticEvent) => Promise<void>
 }
 export const PanelDetailsTextField = ({
   name,
   form,
   label,
+  onSubmit,
   focusedField,
-  onFocusedField
+  setFocusedField
 }: IProps) => {
-  const { field, fieldState } = useController({ control: form.control, name })
+  const { field } = useController({ control: form.control, name })
   const isFocused = focusedField === name
+  const value = isFocused ? field.value : field.value || '(None)'
 
-  console.log(isFocused)
   return (
     <Box mb={4}>
       <Typography fontSize={14} variant="subtitle2">
@@ -77,17 +79,17 @@ export const PanelDetailsTextField = ({
       <Box display="flex" justifyContent="space-between" position="relative">
         <StyledTextField
           {...field}
-          isFocused={isFocused}
+          value={value}
           autoComplete="off"
-          value={field.value || `(None)`}
-          onFocus={() => onFocusedField(name)}
+          isFocused={isFocused}
+          onFocus={() => setFocusedField(name)}
         />
         {isFocused && (
           <StyledButtonGroup variant="contained" color="info">
-            <Button color="primary">
+            <Button color="primary" onClick={() => setFocusedField('')}>
               <ClearOutlinedIcon sx={{ fill: '#fff' }} />
             </Button>
-            <Button color="primary">
+            <Button color="primary" onClick={onSubmit}>
               <CheckOutlinedIcon sx={{ fill: '#fff' }} />
             </Button>
           </StyledButtonGroup>

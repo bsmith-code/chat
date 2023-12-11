@@ -20,19 +20,21 @@ export interface IMessageCreate {
 
 export interface IRoom {
   id: string
-  name?: string
+  name: string
+  description: string
   members: IUser[]
   messages: IMessage[]
 }
 
 export interface IRoomForm {
   id?: string
-  name?: string
-  description?: string
+  name: string
+  description: string
   members: IUser[]
 }
 export interface IRoomCreate {
-  name?: string
+  name: string
+  description: string
   members: string[]
 }
 

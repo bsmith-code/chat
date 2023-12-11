@@ -3,7 +3,11 @@ import { useForm } from 'react-hook-form'
 import { shallowEqual } from 'react-redux'
 
 import { selectCurrentRoomId } from 'store/client'
-import { selectUser, useGetRoomsQuery } from 'store/server'
+import {
+  selectUser,
+  useGetRoomsQuery,
+  useUpdateRoomMutation
+} from 'store/server'
 
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
 import {
@@ -33,6 +37,7 @@ export const PanelDetails = () => {
   const currentUser = useAppSelector(selectUser, shallowEqual)
   const currentRoomId = useAppSelector(selectCurrentRoomId)
 
+  const [updateRoom] = useUpdateRoomMutation()
   const { currentRoom } = useGetRoomsQuery(currentUser.id, {
     skip: !currentRoomId || !currentUser.id,
     selectFromResult: ({ data = [], ...restResult }) => ({
@@ -43,22 +48,24 @@ export const PanelDetails = () => {
 
   const [focusedField, setFocusedField] = useState('')
 
-  const handleFocusedField = (fieldName: 'name' | 'description') => {
-    setFocusedField(fieldName as string)
-  }
-
-  const { id, name, members } = currentRoom ?? {}
+  const { id, name, description, members } = currentRoom ?? {}
   const form = useForm<IRoomForm>({
     defaultValues: {
       id,
       name,
       members,
-      description: ''
+      description
     }
   })
 
-  const handleSubmit = form.handleSubmit((data: IRoomForm) => {
-    console.log(data)
+  const handleSubmit = form.handleSubmit(async (data: IRoomForm) => {
+    const preparedData = {
+      ...data,
+      members: data.members.map(member => member.id)
+    } as IRoomUpdate
+
+    await updateRoom(preparedData)
+    setFocusedField('')
   })
 
   return (
@@ -69,7 +76,7 @@ export const PanelDetails = () => {
         label="Name:"
         onSubmit={handleSubmit}
         focusedField={focusedField}
-        onFocusedField={handleFocusedField}
+        setFocusedField={setFocusedField}
       />
       <PanelDetailsTextField
         form={form}
@@ -77,7 +84,7 @@ export const PanelDetails = () => {
         label="Description:"
         onSubmit={handleSubmit}
         focusedField={focusedField}
-        onFocusedField={handleFocusedField}
+        setFocusedField={setFocusedField}
       />
 
       <Box>

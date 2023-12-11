@@ -55,15 +55,26 @@ export const chatApi = createApi({
         try {
           await cacheDataLoaded
 
-          const listener = (room: IRoom) => {
-            if (!room.members.find(({ id }) => id === arg)) return
+          const listener =
+            (callback: (room: IRoom) => void) => (room: IRoom) => {
+              if (!room.members.find(({ id }) => id === arg)) return
+              callback(room)
+            }
 
+          const createListener = (room: IRoom) => {
             updateCachedData(draft => {
               draft.push(room)
             })
           }
+          const updateListener = (room: IRoom) => {
+            updateCachedData(draft => {
+              const draftRoom = draft.find(({ id }) => id === room.id) ?? {}
+              Object.assign(draftRoom, room)
+            })
+          }
 
-          socket.on('createRoom', listener)
+          socket.on('createRoom', listener(createListener))
+          socket.on('updateRoom', listener(updateListener))
         } catch (error) {
           console.error(error)
         }
@@ -126,6 +137,7 @@ export const chatApi = createApi({
 
 export const {
   useGetRoomsQuery,
+  useUpdateRoomMutation,
   useCreateRoomMutation,
   useCreateMessageMutation,
   useGetRoomMessagesQuery

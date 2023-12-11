@@ -28,6 +28,7 @@ export const mockMembers: IUser[] = Array.from({ length: 20 }).map(
 export const mockRooms: IRoom[] = Array.from({ length: 20 }).map((_, idx) => ({
   id: `room-${idx}`,
   name: `Room ${idx}`,
+  description: `Room Description ${idx}`,
   members: mockMembers,
   messages: mockMessages
 }))
