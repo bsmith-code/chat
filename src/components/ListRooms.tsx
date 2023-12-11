@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { shallowEqual } from 'react-redux'
 
 import { updateCurrentRoomId } from 'store/client'
@@ -20,8 +21,11 @@ import { getRoomName, getUserInitials } from 'utils'
 
 export const ListRooms = () => {
   const dispatch = useAppDispatch()
-  const { data: rooms = [] } = useGetRoomsQuery()
   const currentUser = useAppSelector(selectUser, shallowEqual)
+
+  const { data: rooms = [] } = useGetRoomsQuery(currentUser.id, {
+    skip: !currentUser.id
+  })
 
   const handleClickRoom = (id: string) => {
     dispatch(updateCurrentRoomId(id))
@@ -35,11 +39,8 @@ export const ListRooms = () => {
         )
         const preparedRoomName = getRoomName(preparedMembers, name)
         return (
-          <>
-            <ListItemButton
-              key={`room-${id}`}
-              onClick={() => handleClickRoom(id)}
-            >
+          <Fragment key={`room-${id}`}>
+            <ListItemButton onClick={() => handleClickRoom(id)}>
               <AvatarGroup max={3} total={preparedMembers.length}>
                 {preparedMembers.map(member => (
                   <Avatar key={`avatar-${member.id}`}>
@@ -55,7 +56,7 @@ export const ListRooms = () => {
               </ListItemText>
             </ListItemButton>
             <Divider />
-          </>
+          </Fragment>
         )
       })}
     </List>

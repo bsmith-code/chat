@@ -1,8 +1,17 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import io from 'socket.io-client'
 
+import { useAppSelector } from 'hooks/useRedux'
+
 import { IRootState } from 'types/redux'
-import { IMessage, IMessageCreate, IRoom, IRoomCreate, IUser } from 'types/room'
+import {
+  IMessage,
+  IMessageCreate,
+  IRoom,
+  IRoomCreate,
+  IRoomUpdate,
+  IUser
+} from 'types/room'
 
 const baseUrl = process.env?.REACT_APP_API_BASE_URL ?? ''
 
@@ -22,6 +31,11 @@ export const authApi = createApi({
   })
 })
 
+export const { useSessionQuery, useGetUsersQuery } = authApi
+
+export const selectUser = (state: IRootState) =>
+  authApi.endpoints.session.select()(state).data ?? ({} as IUser)
+
 export const chatApi = createApi({
   reducerPath: 'chatApi',
   baseQuery: fetchBaseQuery({
@@ -30,17 +44,47 @@ export const chatApi = createApi({
   }),
   tagTypes: ['IRoom'],
   endpoints: build => ({
-    getRooms: build.query<IRoom[], void>({
+    getRooms: build.query<IRoom[], string>({
       query: () => 'rooms',
-      providesTags: ['IRoom']
+      async onCacheEntryAdded(
+        arg,
+        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
+      ) {
+        const socket = io(baseUrl)
+
+        try {
+          await cacheDataLoaded
+
+          const listener = (room: IRoom) => {
+            if (!room.members.find(({ id }) => id === arg)) return
+
+            updateCachedData(draft => {
+              draft.push(room)
+            })
+          }
+
+          socket.on('createRoom', listener)
+        } catch (error) {
+          console.error(error)
+        }
+
+        await cacheEntryRemoved
+        socket.close()
+      }
     }),
     createRoom: build.mutation<IRoom, IRoomCreate>({
       query: body => ({
         url: 'rooms',
         method: 'POST',
         body
-      }),
-      invalidatesTags: ['IRoom']
+      })
+    }),
+    updateRoom: build.mutation<IRoom, IRoomUpdate>({
+      query: body => ({
+        url: `rooms`,
+        method: 'PUT',
+        body
+      })
     }),
     getRoomMessages: build.query<IMessage[], string>({
       query: id => `rooms/${id}/messages`,
@@ -61,10 +105,9 @@ export const chatApi = createApi({
             })
           }
 
-          socket.on('message', listener)
-        } catch {
-          // no-op in case `cacheEntryRemoved` resolves before `cacheDataLoaded`,
-          // in which case `cacheDataLoaded` will throw
+          socket.on('createMessage', listener)
+        } catch (error) {
+          console.error(error)
         }
 
         await cacheEntryRemoved
@@ -87,7 +130,3 @@ export const {
   useCreateMessageMutation,
   useGetRoomMessagesQuery
 } = chatApi
-export const { useSessionQuery, useGetUsersQuery } = authApi
-
-export const selectUser = (state: IRootState) =>
-  authApi.endpoints.session.select()(state).data ?? ({} as IUser)

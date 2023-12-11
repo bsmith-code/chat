@@ -26,10 +26,16 @@ export interface IRoom {
 }
 
 export interface IRoomForm {
+  id?: string
   name?: string
+  description?: string
   members: IUser[]
 }
 export interface IRoomCreate {
   name?: string
   members: string[]
+}
+
+export interface IRoomUpdate extends IRoomCreate {
+  id: string
 }
