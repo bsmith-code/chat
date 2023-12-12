@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, Dispatch, SetStateAction, useState } from 'react'
+import { BaseSyntheticEvent, Dispatch, SetStateAction } from 'react'
 import { useController, UseFormReturn } from 'react-hook-form'
 import isPropValid from '@emotion/is-prop-valid'
 
@@ -8,7 +8,6 @@ import {
   Box,
   Button,
   ButtonGroup,
-  IconButton,
   outlinedInputClasses,
   styled,
   TextField,
@@ -31,16 +30,17 @@ const StyledTextField = styled(TextField, { shouldForwardProp: isPropValid })<{
       ? {
           [`.${outlinedInputClasses.notchedOutline}`]: {
             borderColor: 'transparent'
-          },
-          ':hover': {
-            [`.${outlinedInputClasses.notchedOutline}`]: {
-              borderColor: theme.palette.action.focus
-            }
           }
         }
       : {
           borderColor: theme.palette.primary.main
-        })
+        }),
+
+    ':hover': {
+      [`.${outlinedInputClasses.notchedOutline}`]: {
+        borderColor: theme.palette.action.focus
+      }
+    }
   }
 }))
 

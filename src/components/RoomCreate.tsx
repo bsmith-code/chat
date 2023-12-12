@@ -110,7 +110,6 @@ export const RoomCreate = () => {
                 }}
                 value={field.value}
                 options={users}
-                getOptionLabel={user => getUserFullName(user)}
                 renderTags={(value, getTagProps) =>
                   value.map((user, index) => (
                     <Chip
@@ -126,7 +125,7 @@ export const RoomCreate = () => {
                     key={`user-${option.id}`}
                     data-testid={`user-${option.id}`}
                   >
-                    {option.firstName}
+                    {getUserFullName(option)}
                   </ListItemButton>
                 )}
                 renderInput={params => (

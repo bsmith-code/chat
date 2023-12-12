@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { shallowEqual } from 'react-redux'
 
@@ -9,29 +9,14 @@ import {
   useUpdateRoomMutation
 } from 'store/server'
 
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
-import {
-  Avatar,
-  Box,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  outlinedInputClasses,
-  Paper,
-  styled,
-  TextField,
-  Typography
-} from '@mui/material'
+import { Box, Paper } from '@mui/material'
 
 import { useAppSelector } from 'hooks/useRedux'
 
-import { getUserFullName, getUserInitials } from 'utils'
+import { PanelDetailsMembers } from 'components/PanelDetailsMembers'
+import { PanelDetailsTextField } from 'components/PanelDetailsTextField'
 
 import { IRoomForm } from 'types/room'
-
-import { PanelDetailsTextField } from './PanelDetailsTextField'
 
 export const PanelDetails = () => {
   const currentUser = useAppSelector(selectUser, shallowEqual)
@@ -81,29 +66,11 @@ export const PanelDetails = () => {
         focusedField={focusedField}
         setFocusedField={setFocusedField}
       />
-
-      <Box>
-        <Typography fontSize={14} variant="subtitle2">
-          Members:
-        </Typography>
-        {members?.length ? (
-          <List>
-            {members.map(member => (
-              <ListItem key={`member-${member.id}`}>
-                <Avatar>{getUserInitials(member)}</Avatar>
-                <ListItemText sx={{ ml: 2 }}>
-                  {getUserFullName(member)}
-                </ListItemText>
-                <IconButton>
-                  <DeleteOutlinedIcon />
-                </IconButton>
-              </ListItem>
-            ))}
-          </List>
-        ) : (
-          <Typography>No members available.</Typography>
-        )}
-      </Box>
+      <PanelDetailsMembers
+        form={form}
+        onSubmit={handleSubmit}
+        currentUser={currentUser}
+      />
     </Box>
   )
 }
