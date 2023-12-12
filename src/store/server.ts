@@ -46,26 +46,40 @@ export const chatApi = createApi({
         try {
           await cacheDataLoaded
 
-          const listener =
-            (callback: (room: IRoom) => void) => (room: IRoom) => {
-              if (!room.members.find(({ id }) => id === arg)) return
-              callback(room)
-            }
-
           const createListener = (room: IRoom) => {
+            if (!room.members.find(({ id }) => id === arg)) return
+
             updateCachedData(draft => {
               draft.push(room)
             })
           }
-          const updateListener = (room: IRoom) => {
+          const updateRoomListener = (room: IRoom) => {
             updateCachedData(draft => {
-              const draftRoom = draft.find(({ id }) => id === room.id) ?? {}
-              Object.assign(draftRoom, room)
+              const draftRoom = draft.find(({ id }) => id === room.id)
+
+              if (draftRoom) {
+                Object.assign(draftRoom, room)
+              }
             })
           }
 
-          socket.on('createRoom', listener(createListener))
-          socket.on('updateRoom', listener(updateListener))
+          const createMessageListener = (message: IMessage) => {
+            updateCachedData(draft => {
+              const draftRoom =
+                draft.find(({ id }) => id === message.roomId) ?? {}
+
+              if (draftRoom) {
+                Object.assign(draftRoom, {
+                  ...draftRoom,
+                  message
+                })
+              }
+            })
+          }
+
+          socket.on('createMessage', createMessageListener)
+          socket.on('createRoom', createListener)
+          socket.on('updateRoom', updateRoomListener)
         } catch (error) {
           console.error(error)
         }

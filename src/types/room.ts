@@ -23,7 +23,7 @@ export interface IRoom {
   name: string
   description: string
   members: IUser[]
-  messages: IMessage[]
+  message: IMessage
 }
 
 export interface IRoomForm {
