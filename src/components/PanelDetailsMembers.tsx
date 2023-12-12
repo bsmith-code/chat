@@ -57,6 +57,7 @@ export const PanelDetailsMembers = ({
   const [isAddingMember, setIsAddingMember] = useState(false)
 
   const handleOpenDialog = () => {
+    form.resetField('members')
     setIsAddingMember(true)
   }
   const handleCloseDialog = () => {
@@ -66,14 +67,14 @@ export const PanelDetailsMembers = ({
   const handleRemoveMember =
     (id: string) => async (e: MouseEvent<HTMLButtonElement>) => {
       const preparedMembers = members.filter(
-        member => member.id !== id && currentUser.id !== member.id
+        member => member.id !== id && member.id !== currentUser.id
       )
 
       onChange(preparedMembers)
       await onSubmit(e)
     }
 
-  const handleUpdateMembers = async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleAddMembers = async (e: MouseEvent<HTMLButtonElement>) => {
     await onSubmit(e)
     handleCloseDialog()
   }
@@ -98,7 +99,7 @@ export const PanelDetailsMembers = ({
                 <ListItemText sx={{ ml: 2 }}>
                   {getUserFullName(member)}
                 </ListItemText>
-                {currentUser.id !== member.id && (
+                {currentUser.id !== member.id && members.length > 2 && (
                   <IconButton onClick={handleRemoveMember(member.id)}>
                     <DeleteOutlinedIcon />
                   </IconButton>
@@ -111,13 +112,13 @@ export const PanelDetailsMembers = ({
         )}
       </Box>
       <Dialog open={isAddingMember}>
-        <DialogTitle>Update members</DialogTitle>
+        <DialogTitle>Add members</DialogTitle>
         <DialogContent sx={{ minWidth: '400px', overflow: 'visible' }}>
           <InputMembers form={form} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleUpdateMembers}>Update</Button>
+          <Button onClick={handleAddMembers}>Add</Button>
         </DialogActions>
       </Dialog>
     </>

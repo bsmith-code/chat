@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useController, UseFormReturn } from 'react-hook-form'
 import { shallowEqual } from 'react-redux'
 
@@ -15,7 +16,7 @@ import { useAppSelector } from 'hooks/useRedux'
 
 import { getUserFullName } from 'utils'
 
-import { IRoomForm } from 'types/room'
+import { IRoomForm, IUser } from 'types/room'
 
 interface IProps {
   form: UseFormReturn<IRoomForm>
@@ -37,20 +38,21 @@ export const InputMembers = ({ form }: IProps) => {
     })
   })
 
-  const preparedValue = field.value.filter(({ id }) => id !== currentUser.id)
+  const [value, setValue] = useState<IUser[]>([])
 
   return (
     <>
       <Autocomplete
         multiple
-        onChange={(_, value) => {
-          field.onChange(value)
+        onChange={(_, updatedValue) => {
+          setValue(updatedValue)
+          field.onChange([...field.value, ...updatedValue])
         }}
-        value={preparedValue}
+        value={value}
         options={users}
         getOptionLabel={user => getUserFullName(user)}
-        renderTags={(value, getTagProps) =>
-          value.map((user, index) => (
+        renderTags={(renderValue, getTagProps) =>
+          renderValue.map((user, index) => (
             <Chip label={getUserFullName(user)} {...getTagProps({ index })} />
           ))
         }
