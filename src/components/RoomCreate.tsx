@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 import { useCreateRoomMutation } from 'store/server'
 
@@ -12,6 +13,8 @@ import {
   DialogTitle,
   TextField
 } from '@mui/material'
+
+import { roomSchema } from 'utils'
 
 import { IRoomForm } from 'types/room'
 
@@ -26,7 +29,8 @@ export const RoomCreate = () => {
       name: '',
       description: '',
       members: []
-    }
+    },
+    resolver: yupResolver(roomSchema)
   })
   const { control, handleSubmit, reset } = form
 

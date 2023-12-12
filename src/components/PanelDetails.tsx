@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { shallowEqual } from 'react-redux'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 import { selectCurrentRoomId } from 'store/client'
 import {
@@ -15,6 +16,8 @@ import { useAppSelector } from 'hooks/useRedux'
 
 import { PanelDetailsMembers } from 'components/PanelDetailsMembers'
 import { PanelDetailsTextField } from 'components/PanelDetailsTextField'
+
+import { roomSchema } from 'utils'
 
 import { IRoomForm } from 'types/room'
 
@@ -36,16 +39,18 @@ export const PanelDetails = () => {
   const { members = [] } = currentRoom ?? {}
 
   const form = useForm<IRoomForm>({
-    defaultValues: currentRoom
+    defaultValues: currentRoom,
+    resolver: yupResolver(roomSchema)
   })
 
+  const handleResetForm = () => form.reset(currentRoom)
   const handleSubmit = form.handleSubmit(async (data: IRoomForm) => {
     await updateRoom(data)
     setFocusedField('')
   })
 
   useEffect(() => {
-    form.reset(currentRoom)
+    handleResetForm()
   }, [currentRoomId])
 
   return (

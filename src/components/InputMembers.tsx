@@ -3,7 +3,13 @@ import { shallowEqual } from 'react-redux'
 
 import { selectUser, useGetUsersQuery } from 'store/server'
 
-import { Autocomplete, Chip, ListItemButton, TextField } from '@mui/material'
+import {
+  Autocomplete,
+  Chip,
+  FormHelperText,
+  ListItemButton,
+  TextField
+} from '@mui/material'
 
 import { useAppSelector } from 'hooks/useRedux'
 
@@ -15,7 +21,10 @@ interface IProps {
   form: UseFormReturn<IRoomForm>
 }
 export const InputMembers = ({ form }: IProps) => {
-  const { field } = useController({ control: form.control, name: 'members' })
+  const {
+    field,
+    fieldState: { error }
+  } = useController({ control: form.control, name: 'members' })
 
   const currentUser = useAppSelector(selectUser, shallowEqual)
 
@@ -31,30 +40,33 @@ export const InputMembers = ({ form }: IProps) => {
   const preparedValue = field.value.filter(({ id }) => id !== currentUser.id)
 
   return (
-    <Autocomplete
-      multiple
-      onChange={(_, value) => {
-        field.onChange(value)
-      }}
-      value={preparedValue}
-      options={users}
-      getOptionLabel={user => getUserFullName(user)}
-      renderTags={(value, getTagProps) =>
-        value.map((user, index) => (
-          <Chip label={getUserFullName(user)} {...getTagProps({ index })} />
-        ))
-      }
-      renderOption={(props, option) => (
-        <ListItemButton
-          {...props}
-          component="li"
-          key={`user-${option.id}`}
-          data-testid={`user-${option.id}`}
-        >
-          {getUserFullName(option)}
-        </ListItemButton>
-      )}
-      renderInput={params => <TextField {...params} label="Members" />}
-    />
+    <>
+      <Autocomplete
+        multiple
+        onChange={(_, value) => {
+          field.onChange(value)
+        }}
+        value={preparedValue}
+        options={users}
+        getOptionLabel={user => getUserFullName(user)}
+        renderTags={(value, getTagProps) =>
+          value.map((user, index) => (
+            <Chip label={getUserFullName(user)} {...getTagProps({ index })} />
+          ))
+        }
+        renderOption={(props, option) => (
+          <ListItemButton
+            {...props}
+            component="li"
+            key={`user-${option.id}`}
+            data-testid={`user-${option.id}`}
+          >
+            {getUserFullName(option)}
+          </ListItemButton>
+        )}
+        renderInput={params => <TextField {...params} label="Members" />}
+      />
+      {!!error && <FormHelperText error>{error?.message}</FormHelperText>}
+    </>
   )
 }

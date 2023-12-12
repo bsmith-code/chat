@@ -55,6 +55,7 @@ export const PanelDetailsMembers = ({
   } = useController({ control: form.control, name: 'members' })
 
   const [isAddingMember, setIsAddingMember] = useState(false)
+
   const handleOpenDialog = () => {
     setIsAddingMember(true)
   }
@@ -64,7 +65,9 @@ export const PanelDetailsMembers = ({
 
   const handleRemoveMember =
     (id: string) => async (e: MouseEvent<HTMLButtonElement>) => {
-      const preparedMembers = members.filter(member => member.id !== id)
+      const preparedMembers = members.filter(
+        member => member.id !== id && currentUser.id !== member.id
+      )
 
       onChange(preparedMembers)
       await onSubmit(e)
