@@ -56,12 +56,7 @@ export const RoomCreate = () => {
   }
 
   const onSubmit = async (data: IRoomForm) => {
-    const preparedData = {
-      ...data,
-      members: data.members.map(({ id }) => id)
-    }
-
-    await createRoom(preparedData)
+    await createRoom(data)
     handleCloseDialog()
   }
 

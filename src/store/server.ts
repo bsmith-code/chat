@@ -1,17 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import io from 'socket.io-client'
 
-import { useAppSelector } from 'hooks/useRedux'
-
 import { IRootState } from 'types/redux'
-import {
-  IMessage,
-  IMessageCreate,
-  IRoom,
-  IRoomCreate,
-  IRoomUpdate,
-  IUser
-} from 'types/room'
+import { IMessage, IMessageCreate, IRoom, IRoomForm, IUser } from 'types/room'
 
 const baseUrl = process.env?.REACT_APP_API_BASE_URL ?? ''
 
@@ -83,14 +74,14 @@ export const chatApi = createApi({
         socket.close()
       }
     }),
-    createRoom: build.mutation<IRoom, IRoomCreate>({
+    createRoom: build.mutation<IRoom, IRoomForm>({
       query: body => ({
         url: 'rooms',
         method: 'POST',
         body
       })
     }),
-    updateRoom: build.mutation<IRoom, IRoomUpdate>({
+    updateRoom: build.mutation<IRoom, IRoomForm>({
       query: body => ({
         url: `rooms`,
         method: 'PUT',

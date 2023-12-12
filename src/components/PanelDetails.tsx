@@ -29,7 +29,7 @@ import { useAppSelector } from 'hooks/useRedux'
 
 import { getUserFullName, getUserInitials } from 'utils'
 
-import { IRoomForm, IRoomUpdate } from 'types/room'
+import { IRoomForm } from 'types/room'
 
 import { PanelDetailsTextField } from './PanelDetailsTextField'
 
@@ -59,12 +59,7 @@ export const PanelDetails = () => {
   })
 
   const handleSubmit = form.handleSubmit(async (data: IRoomForm) => {
-    const preparedData = {
-      ...data,
-      members: data.members.map(member => member.id)
-    } as IRoomUpdate
-
-    await updateRoom(preparedData)
+    await updateRoom(data)
     setFocusedField('')
   })
 
