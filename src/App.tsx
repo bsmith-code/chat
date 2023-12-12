@@ -12,6 +12,7 @@ import { PanelRooms } from 'components/PanelRooms'
 export const App = () => {
   useSessionQuery()
   const currentRoomId = useAppSelector(selectCurrentRoomId)
+
   return (
     <LayoutDefault>
       <PanelRooms />

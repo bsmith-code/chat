@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { shallowEqual } from 'react-redux'
 
@@ -33,20 +33,20 @@ export const PanelDetails = () => {
 
   const [focusedField, setFocusedField] = useState('')
 
-  const { id, name, description, members } = currentRoom ?? {}
+  const { members = [] } = currentRoom ?? {}
+
   const form = useForm<IRoomForm>({
-    defaultValues: {
-      id,
-      name,
-      members,
-      description
-    }
+    defaultValues: currentRoom
   })
 
   const handleSubmit = form.handleSubmit(async (data: IRoomForm) => {
     await updateRoom(data)
     setFocusedField('')
   })
+
+  useEffect(() => {
+    form.reset(currentRoom)
+  }, [currentRoomId])
 
   return (
     <Box component={Paper} flexBasis={400} overflow="auto" p={4}>
@@ -68,6 +68,7 @@ export const PanelDetails = () => {
       />
       <PanelDetailsMembers
         form={form}
+        members={members}
         onSubmit={handleSubmit}
         currentUser={currentUser}
       />

@@ -1,10 +1,16 @@
-import { BaseSyntheticEvent, MouseEvent } from 'react'
+import { BaseSyntheticEvent, MouseEvent, useState } from 'react'
 import { useController, UseFormReturn } from 'react-hook-form'
 
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
 import {
   Avatar,
   Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
   iconButtonClasses,
   List,
@@ -14,12 +20,15 @@ import {
   Typography
 } from '@mui/material'
 
+import { InputMembers } from 'components/InputMembers'
+
 import { getUserFullName, getUserInitials } from 'utils'
 
 import { IRoomForm, IUser } from 'types/room'
 
 interface IProps {
   form: UseFormReturn<IRoomForm>
+  members: IUser[]
   onSubmit: (e: BaseSyntheticEvent) => Promise<void>
   currentUser: IUser
 }
@@ -37,47 +46,77 @@ const StyledListItem = styled(ListItem)(() => ({
 
 export const PanelDetailsMembers = ({
   form,
+  members,
   onSubmit,
   currentUser
 }: IProps) => {
   const {
-    field: { value: members, onChange }
+    field: { onChange }
   } = useController({ control: form.control, name: 'members' })
 
-  const handleRemoveUser =
-    (id: string) => async (e: MouseEvent<HTMLButtonElement>) => {
-      if (id === currentUser.id) return
+  const [isAddingMember, setIsAddingMember] = useState(false)
+  const handleOpenDialog = () => {
+    setIsAddingMember(true)
+  }
+  const handleCloseDialog = () => {
+    setIsAddingMember(false)
+  }
 
+  const handleRemoveMember =
+    (id: string) => async (e: MouseEvent<HTMLButtonElement>) => {
       const preparedMembers = members.filter(member => member.id !== id)
 
       onChange(preparedMembers)
       await onSubmit(e)
     }
 
+  const handleUpdateMembers = async (e: MouseEvent<HTMLButtonElement>) => {
+    await onSubmit(e)
+    handleCloseDialog()
+  }
+
   return (
-    <Box>
-      <Typography fontSize={14} variant="subtitle2">
-        Members:
-      </Typography>
-      {members?.length ? (
-        <List>
-          {members.map(member => (
-            <StyledListItem key={`member-${member.id}`}>
-              <Avatar>{getUserInitials(member)}</Avatar>
-              <ListItemText sx={{ ml: 2 }}>
-                {getUserFullName(member)}
-              </ListItemText>
-              {currentUser.id !== member.id && (
-                <IconButton onClick={handleRemoveUser(member.id)}>
-                  <DeleteOutlinedIcon />
-                </IconButton>
-              )}
-            </StyledListItem>
-          ))}
-        </List>
-      ) : (
-        <Typography>No members available.</Typography>
-      )}
-    </Box>
+    <>
+      <Box>
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <Typography fontSize={14} variant="subtitle2">
+            Members:
+          </Typography>
+          <IconButton onClick={handleOpenDialog}>
+            <AddOutlinedIcon />
+          </IconButton>
+        </Box>
+
+        {members?.length ? (
+          <List>
+            {members.map(member => (
+              <StyledListItem key={`member-${member.id}`}>
+                <Avatar>{getUserInitials(member)}</Avatar>
+                <ListItemText sx={{ ml: 2 }}>
+                  {getUserFullName(member)}
+                </ListItemText>
+                {currentUser.id !== member.id && (
+                  <IconButton onClick={handleRemoveMember(member.id)}>
+                    <DeleteOutlinedIcon />
+                  </IconButton>
+                )}
+              </StyledListItem>
+            ))}
+          </List>
+        ) : (
+          <Typography>No members available.</Typography>
+        )}
+      </Box>
+      <Dialog open={isAddingMember}>
+        <DialogTitle>Update members</DialogTitle>
+        <DialogContent sx={{ minWidth: '400px', overflow: 'visible' }}>
+          <InputMembers form={form} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleUpdateMembers}>Update</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   )
 }
