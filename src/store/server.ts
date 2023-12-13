@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import io from 'socket.io-client'
+import io, { Socket } from 'socket.io-client'
 
 import { IRootState } from 'types/redux'
 import { IMessage, IMessageCreate, IRoom, IRoomForm, IUser } from 'types/room'
 
 const baseUrl = process.env?.REACT_APP_API_BASE_URL ?? ''
+let socket: Socket | undefined
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -14,7 +15,13 @@ export const authApi = createApi({
   }),
   endpoints: build => ({
     session: build.query<IUser, void>({
-      query: () => 'session'
+      query: () => 'session',
+      onCacheEntryAdded: async (_, { cacheEntryRemoved }) => {
+        socket = io(baseUrl)
+
+        await cacheEntryRemoved
+        socket.close()
+      }
     }),
     getUsers: build.query<IUser[], void>({
       query: () => 'users'
@@ -37,12 +44,8 @@ export const chatApi = createApi({
   endpoints: build => ({
     getRooms: build.query<IRoom[], string>({
       query: () => 'rooms',
-      async onCacheEntryAdded(
-        arg,
-        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
-      ) {
-        const socket = io(baseUrl)
-
+      async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded }) {
+        if (!socket) return
         try {
           await cacheDataLoaded
 
@@ -55,10 +58,19 @@ export const chatApi = createApi({
           }
           const updateRoomListener = (room: IRoom) => {
             updateCachedData(draft => {
-              const draftRoom = draft.find(({ id }) => id === room.id)
+              if (!room.members.find(({ id }) => id === arg)) {
+                draft.splice(
+                  draft.findIndex(({ id }) => id === room.id),
+                  1
+                )
+              } else {
+                const draftRoom = draft.find(({ id }) => id === room.id)
 
-              if (draftRoom) {
-                Object.assign(draftRoom, room)
+                if (draftRoom) {
+                  Object.assign(draftRoom, room)
+                } else {
+                  draft.push(room)
+                }
               }
             })
           }
@@ -70,7 +82,6 @@ export const chatApi = createApi({
 
               if (draftRoom) {
                 Object.assign(draftRoom, {
-                  ...draftRoom,
                   message
                 })
               }
@@ -83,9 +94,6 @@ export const chatApi = createApi({
         } catch (error) {
           console.error(error)
         }
-
-        await cacheEntryRemoved
-        socket.close()
       }
     }),
     createRoom: build.mutation<IRoom, IRoomForm>({
@@ -104,11 +112,8 @@ export const chatApi = createApi({
     }),
     getRoomMessages: build.query<IMessage[], string>({
       query: id => `rooms/${id}/messages`,
-      async onCacheEntryAdded(
-        arg,
-        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
-      ) {
-        const socket = io(baseUrl)
+      async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded }) {
+        if (!socket) return
 
         try {
           await cacheDataLoaded
@@ -125,9 +130,6 @@ export const chatApi = createApi({
         } catch (error) {
           console.error(error)
         }
-
-        await cacheEntryRemoved
-        socket.close()
       }
     }),
     createMessage: build.mutation<IMessage, IMessageCreate>({

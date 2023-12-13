@@ -64,8 +64,11 @@ export const PanelMessages = () => {
 
   const handleSubmitMessage = async (e: FormEvent) => {
     e.preventDefault()
-    await createMessage({ message: userMessage, roomId: currentRoomId })
-    setUserMessage('')
+
+    if (userMessage && currentRoomId) {
+      await createMessage({ message: userMessage, roomId: currentRoomId })
+      setUserMessage('')
+    }
   }
 
   const handleInputMessage = (event: ChangeEvent<HTMLInputElement>) => {
