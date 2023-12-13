@@ -1,6 +1,3 @@
-import { BaseSyntheticEvent, MouseEvent, useState } from 'react'
-import { useController, UseFormReturn } from 'react-hook-form'
-
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
 import {
@@ -20,18 +17,13 @@ import {
   Typography
 } from '@mui/material'
 
+import { usePanelDetailsContext } from 'context/PanelDetailsContext'
+
+import { useUpdateMembers } from 'hooks/useUpdateMembers'
+
 import { InputMembers } from 'components/InputMembers'
 
 import { getUserFullName, getUserInitials } from 'utils'
-
-import { IRoomForm, IUser } from 'types/room'
-
-interface IProps {
-  form: UseFormReturn<IRoomForm>
-  members: IUser[]
-  onSubmit: (e: BaseSyntheticEvent) => Promise<void>
-  currentUser: IUser
-}
 
 const StyledListItem = styled(ListItem)(() => ({
   [`.${iconButtonClasses.root}`]: {
@@ -44,40 +36,16 @@ const StyledListItem = styled(ListItem)(() => ({
   }
 }))
 
-export const PanelDetailsMembers = ({
-  form,
-  members,
-  onSubmit,
-  currentUser
-}: IProps) => {
+export const PanelDetailsMembers = () => {
   const {
-    field: { onChange }
-  } = useController({ control: form.control, name: 'members' })
-
-  const [isAddingMember, setIsAddingMember] = useState(false)
-
-  const handleOpenDialog = () => {
-    form.resetField('members')
-    setIsAddingMember(true)
-  }
-  const handleCloseDialog = () => {
-    setIsAddingMember(false)
-  }
-
-  const handleRemoveMember =
-    (id: string) => async (e: MouseEvent<HTMLButtonElement>) => {
-      const preparedMembers = members.filter(
-        member => member.id !== id && member.id !== currentUser.id
-      )
-
-      onChange(preparedMembers)
-      await onSubmit(e)
-    }
-
-  const handleAddMembers = async (e: MouseEvent<HTMLButtonElement>) => {
-    await onSubmit(e)
-    handleCloseDialog()
-  }
+    members,
+    isAddingMember,
+    handleOpenDialog,
+    handleAddMembers,
+    handleCloseDialog,
+    handleRemoveMember
+  } = useUpdateMembers()
+  const { form, currentUser } = usePanelDetailsContext()
 
   return (
     <>

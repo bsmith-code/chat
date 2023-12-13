@@ -1,5 +1,4 @@
-import { BaseSyntheticEvent, Dispatch, SetStateAction } from 'react'
-import { useController, UseFormReturn } from 'react-hook-form'
+import { useController } from 'react-hook-form'
 import isPropValid from '@emotion/is-prop-valid'
 
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined'
@@ -14,7 +13,7 @@ import {
   Typography
 } from '@mui/material'
 
-import { IRoomForm } from 'types/room'
+import { usePanelDetailsContext } from 'context/PanelDetailsContext'
 
 const StyledTextField = styled(TextField, { shouldForwardProp: isPropValid })<{
   isFocused: boolean
@@ -54,20 +53,12 @@ const StyledButtonGroup = styled(ButtonGroup)(({ theme }) => ({
 interface IProps {
   name: 'name' | 'description'
   label: string
-  focusedField: string
-  setFocusedField: Dispatch<SetStateAction<string>>
-  form: UseFormReturn<IRoomForm>
-  onSubmit: (e: BaseSyntheticEvent) => Promise<void>
 }
-export const PanelDetailsTextField = ({
-  name,
-  form,
-  label,
-  onSubmit,
-  focusedField,
-  setFocusedField
-}: IProps) => {
+export const PanelDetailsTextField = ({ name, label }: IProps) => {
+  const { form, focusedField, handleSubmit, setFocusedField } =
+    usePanelDetailsContext()
   const { field } = useController({ control: form.control, name })
+
   const isFocused = focusedField === name
   const value = isFocused ? field.value : field.value || '(None)'
 
@@ -89,7 +80,7 @@ export const PanelDetailsTextField = ({
             <Button color="primary" onClick={() => setFocusedField('')}>
               <ClearOutlinedIcon sx={{ fill: '#fff' }} />
             </Button>
-            <Button color="primary" onClick={onSubmit}>
+            <Button color="primary" onClick={handleSubmit}>
               <CheckOutlinedIcon sx={{ fill: '#fff' }} />
             </Button>
           </StyledButtonGroup>
