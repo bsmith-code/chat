@@ -7,7 +7,7 @@ import {
 } from '@reduxjs/toolkit'
 
 import { createNotification } from 'store/client'
-import { authApi } from 'store/server'
+import { authApi, authListeners } from 'store/server'
 
 import { TAppListenerAPI, TAppStartListening } from 'types/redux'
 
@@ -31,4 +31,8 @@ export const listenerMiddleware = createListenerMiddleware()
 const startAppListening =
   listenerMiddleware.startListening as TAppStartListening
 
-startAppListening(exceptionListener as never)
+const listeners = [exceptionListener, ...authListeners]
+
+listeners.forEach(listener => {
+  startAppListening(listener as never)
+})

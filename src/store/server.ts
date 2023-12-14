@@ -1,7 +1,8 @@
+import { AnyAction } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import io, { Socket } from 'socket.io-client'
 
-import { IRootState } from 'types/redux'
+import { IRootState, TAppListenerAPI } from 'types/redux'
 import { IMessage, IMessageCreate, IRoom, IRoomForm, IUser } from 'types/room'
 
 const baseUrl = process.env?.REACT_APP_API_BASE_URL ?? ''
@@ -13,6 +14,7 @@ export const authApi = createApi({
     baseUrl: `${baseUrl}/v1/auth`,
     credentials: 'include'
   }),
+
   endpoints: build => ({
     session: build.query<IUser, void>({
       query: () => 'session',
@@ -35,14 +37,34 @@ export const authApi = createApi({
         method: 'POST',
         body
       })
+    }),
+    logout: build.mutation<void, void>({
+      query: () => ({
+        url: 'logout',
+        method: 'POST'
+      })
     })
   })
 })
 
-export const { useSessionQuery, useGetUsersQuery, useErrorMutation } = authApi
+export const {
+  useSessionQuery,
+  useGetUsersQuery,
+  useLogoutMutation,
+  useErrorMutation
+} = authApi
 
 export const selectUser = (state: IRootState) =>
   authApi.endpoints.session.select()(state).data ?? ({} as IUser)
+
+export const authListeners = [
+  {
+    matcher: authApi.endpoints.logout.matchFulfilled,
+    effect: (_: AnyAction, { dispatch }: TAppListenerAPI) => {
+      dispatch(authApi.util.resetApiState())
+    }
+  }
+]
 
 export const chatApi = createApi({
   reducerPath: 'chatApi',

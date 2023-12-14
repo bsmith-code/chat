@@ -1,15 +1,17 @@
 import { shallowEqual } from 'react-redux'
 
-import { selectUser } from 'store/server'
+import { selectUser, useLogoutMutation } from 'store/server'
 
-import EditIcon from '@mui/icons-material/Edit'
-import { Avatar, Box, IconButton, Typography } from '@mui/material'
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
+import { Avatar, Box, IconButton, Tooltip, Typography } from '@mui/material'
 
 import { useAppSelector } from 'hooks/useRedux'
 
 import { getUserFullName, getUserInitials } from 'utils'
 
 export const UserProfile = () => {
+  const [logout] = useLogoutMutation()
+
   const user = useAppSelector(selectUser, shallowEqual)
   const { email = '' } = user ?? {}
 
@@ -25,9 +27,11 @@ export const UserProfile = () => {
           <Typography fontSize={12}>{email}</Typography>
         </Box>
       </Box>
-      {/* <IconButton>
-        <EditIcon />
-      </IconButton> */}
+      <Tooltip title="Logout">
+        <IconButton onClick={() => logout()}>
+          <LogoutOutlinedIcon />
+        </IconButton>
+      </Tooltip>
     </Box>
   )
 }

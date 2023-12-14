@@ -21,7 +21,6 @@ const redirectUrl = encodeURI(
 export const App = () => {
   useAppNotifications()
   const { data: user, isFetching } = useSessionQuery()
-
   const currentRoomId = useAppSelector(selectCurrentRoomId)
 
   useEffect(() => {
@@ -39,7 +38,9 @@ export const App = () => {
           {currentRoomId && <PanelDetails />}
         </>
       ) : (
-        <Typography>Please login to continue</Typography>
+        <Typography>
+          {isFetching ? 'Loading...' : 'Please login to continue'}
+        </Typography>
       )}
     </LayoutDefault>
   )
