@@ -5,7 +5,7 @@ import io, { Socket } from 'socket.io-client'
 import { IRootState, TAppListenerAPI } from 'types/redux'
 import { IMessage, IMessageCreate, IRoom, IRoomForm, IUser } from 'types/room'
 
-const baseUrl = process.env?.REACT_APP_API_BASE_URL ?? ''
+const baseUrl = process.env.REACT_APP_API_BASE_URL ?? ''
 let socket: Socket | undefined
 
 export const authApi = createApi({
