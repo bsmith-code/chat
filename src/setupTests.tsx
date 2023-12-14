@@ -5,7 +5,7 @@ import { createSerializer } from '@emotion/jest'
 import { render } from '@testing-library/react'
 
 import store from 'store/index'
-import { util } from 'store/server'
+import { authApi, chatApi } from 'store/server'
 
 import '@testing-library/jest-dom'
 
@@ -26,7 +26,8 @@ expect.addSnapshotSerializer(createSerializer({ includeStyles: false }))
 beforeAll(() => {})
 
 beforeEach(() => {
-  store.dispatch(util.resetApiState())
+  store.dispatch(authApi.util.resetApiState())
+  store.dispatch(chatApi.util.resetApiState())
 })
 
 afterAll(() => {})

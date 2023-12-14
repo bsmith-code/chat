@@ -1,15 +1,22 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
-import { middleware, reducer, reducerPath } from 'store/server'
+import { appSlice } from 'store/client'
+import { listenerMiddleware } from 'store/middleware'
+import { authApi, chatApi } from 'store/server'
 
 export const combinedReducers = combineReducers({
-  [reducerPath]: reducer
+  app: appSlice.reducer,
+  [authApi.reducerPath]: authApi.reducer,
+  [chatApi.reducerPath]: chatApi.reducer
 })
 
 const store = configureStore({
   reducer: combinedReducers,
   devTools: process.env.NODE_ENV !== 'production',
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middleware)
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware()
+      .prepend(listenerMiddleware.middleware)
+      .concat(authApi.middleware, chatApi.middleware)
 })
 
 export default store
