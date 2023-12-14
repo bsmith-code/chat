@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { ErrorBoundary } from 'react-error-boundary'
 import { Provider } from 'react-redux'
 import { App } from 'App'
 import { SnackbarProvider } from 'notistack'
@@ -12,6 +13,8 @@ import { Grow } from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline'
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles'
 
+import { AppErrorBoundary } from 'components/AppErrorBoundary'
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
@@ -20,7 +23,9 @@ root.render(
         <ThemeProvider theme={lightTheme}>
           <StyledEngineProvider injectFirst>
             <CssBaseline />
-            <App />
+            <ErrorBoundary FallbackComponent={AppErrorBoundary}>
+              <App />
+            </ErrorBoundary>
           </StyledEngineProvider>
         </ThemeProvider>
       </SnackbarProvider>

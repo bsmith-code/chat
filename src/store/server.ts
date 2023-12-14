@@ -25,11 +25,21 @@ export const authApi = createApi({
     }),
     getUsers: build.query<IUser[], void>({
       query: () => 'users'
+    }),
+    error: build.mutation<
+      void,
+      { host: string; name: string; message: string; stack?: string }
+    >({
+      query: body => ({
+        url: 'error',
+        method: 'POST',
+        body
+      })
     })
   })
 })
 
-export const { useSessionQuery, useGetUsersQuery } = authApi
+export const { useSessionQuery, useGetUsersQuery, useErrorMutation } = authApi
 
 export const selectUser = (state: IRootState) =>
   authApi.endpoints.session.select()(state).data ?? ({} as IUser)
@@ -52,27 +62,27 @@ export const chatApi = createApi({
           const createListener = (room: IRoom) => {
             if (!room.members.find(({ id }) => id === arg)) return
 
-            updateCachedData(draft => {
-              draft.push(room)
-            })
+            updateCachedData(draft => [room, ...draft])
           }
 
           const updateRoomListener = (room: IRoom) => {
             updateCachedData(draft => {
-              if (!room.members.find(({ id }) => id === arg)) {
-                draft.splice(
-                  draft.findIndex(({ id }) => id === room.id),
-                  1
-                )
-              } else {
-                const draftRoom = draft.find(({ id }) => id === room.id)
-
-                if (draftRoom) {
-                  Object.assign(draftRoom, room)
-                } else {
-                  draft.push(room)
-                }
+              const isMember = room.members.find(({ id }) => id === arg)
+              if (!isMember) {
+                const roomIndex = draft.findIndex(({ id }) => id === room.id)
+                return [
+                  ...draft.slice(0, roomIndex),
+                  ...draft.slice(roomIndex + 1)
+                ]
               }
+
+              const draftRoom = draft.find(({ id }) => id === room.id)
+              if (draftRoom) {
+                Object.assign(draftRoom, room)
+                return draft
+              }
+
+              return [room, ...draft]
             })
           }
 
