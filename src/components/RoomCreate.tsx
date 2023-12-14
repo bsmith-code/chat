@@ -1,8 +1,4 @@
-import { useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-
-import { useCreateRoomMutation } from 'store/server'
+import { Controller } from 'react-hook-form'
 
 import {
   Box,
@@ -14,43 +10,24 @@ import {
   TextField
 } from '@mui/material'
 
-import { roomSchema } from 'utils'
+import { useCreateRoom } from 'hooks/useCreateRoom'
 
-import { IRoomForm } from 'types/room'
-
-import { InputMembers } from './InputMembers'
+import { InputMembers } from 'components/InputMembers'
 
 export const RoomCreate = () => {
-  const [isCreatingRoom, setIsCreatingRoom] = useState(false)
-  const [createRoom] = useCreateRoomMutation()
-
-  const form = useForm<IRoomForm>({
-    defaultValues: {
-      name: '',
-      description: '',
-      members: []
-    },
-    resolver: yupResolver(roomSchema)
-  })
-  const { control, handleSubmit, reset } = form
-
-  const handleOpenDialog = () => {
-    setIsCreatingRoom(true)
-  }
-  const handleCancel = () => {
-    setIsCreatingRoom(false)
-    reset()
-  }
-
-  const onSubmit = async (data: IRoomForm) => {
-    await createRoom(data)
-    handleCancel()
-  }
+  const { form, handleCancel, handleSubmit, isCreatingRoom, handleOpenDialog } =
+    useCreateRoom()
+  const { control } = form
 
   return (
     <>
       <Box px={3}>
-        <Button variant="contained" fullWidth onClick={handleOpenDialog}>
+        <Button
+          fullWidth
+          variant="contained"
+          sx={{ color: '#fff' }}
+          onClick={handleOpenDialog}
+        >
           Create room
         </Button>
       </Box>
@@ -90,7 +67,7 @@ export const RoomCreate = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleSubmit(onSubmit)}>Create</Button>
+          <Button onClick={handleSubmit}>Create</Button>
         </DialogActions>
       </Dialog>
     </>

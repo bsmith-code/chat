@@ -56,6 +56,7 @@ export const chatApi = createApi({
               draft.push(room)
             })
           }
+
           const updateRoomListener = (room: IRoom) => {
             updateCachedData(draft => {
               if (!room.members.find(({ id }) => id === arg)) {

@@ -25,15 +25,18 @@ export const useRoomListItem = (room: IRoom) => {
   const isCurrentUser = userId === currentUser.id
   const isCurrentRoom = id === currentRoomId
 
+  const slicedMessage =
+    message && message.length >= 40 ? `${message.slice(0, 40)}...` : message
   const memberName =
     members.find(member => member.id === userId)?.firstName ?? 'Deleted user'
+
   const preparedMembers = members.filter(
     ({ id: memberId }) => memberId !== currentUser.id
   )
   const preparedRoomName = getRoomName(preparedMembers, name)
   const preparedMessage = isCurrentUser
-    ? `You: ${message}`
-    : `${memberName}: ${message}`
+    ? `You: ${slicedMessage}`
+    : `${memberName}: ${slicedMessage}`
 
   const handleClickRoom = () => {
     dispatch(updateCurrentRoomId(id))

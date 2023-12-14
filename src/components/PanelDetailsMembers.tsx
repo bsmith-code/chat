@@ -17,8 +17,6 @@ import {
   Typography
 } from '@mui/material'
 
-import { usePanelDetailsContext } from 'context/PanelDetailsContext'
-
 import { useUpdateMembers } from 'hooks/useUpdateMembers'
 
 import { InputMembers } from 'components/InputMembers'
@@ -38,14 +36,15 @@ const StyledListItem = styled(ListItem)(() => ({
 
 export const PanelDetailsMembers = () => {
   const {
+    form,
     members,
+    currentUser,
     isAddingMember,
     handleOpenDialog,
     handleAddMembers,
     handleCloseDialog,
     handleRemoveMember
   } = useUpdateMembers()
-  const { form, currentUser } = usePanelDetailsContext()
 
   return (
     <>

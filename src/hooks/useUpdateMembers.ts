@@ -1,11 +1,18 @@
 import { MouseEvent, useState } from 'react'
+import { shallowEqual } from 'react-redux'
+
+import { selectUser } from 'store/server'
 
 import { usePanelDetailsContext } from 'context/PanelDetailsContext'
+
+import { useAppSelector } from 'hooks/useRedux'
 
 type TEvent = MouseEvent<HTMLButtonElement>
 export const useUpdateMembers = () => {
   const [isAddingMember, setIsAddingMember] = useState(false)
-  const { membersField, currentRoom, currentUser, handleSubmit } =
+
+  const currentUser = useAppSelector(selectUser, shallowEqual)
+  const { form, membersField, currentRoom, handleSubmit } =
     usePanelDetailsContext()
 
   const { field } = membersField
@@ -33,7 +40,9 @@ export const useUpdateMembers = () => {
   }
 
   return {
+    form,
     members,
+    currentUser,
     isAddingMember,
     handleOpenDialog,
     handleAddMembers,

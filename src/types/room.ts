@@ -10,6 +10,7 @@ export interface IMessage {
   message: string
   roomId: string
   userId: string
+  user: IUser
   createdAt: string
 }
 

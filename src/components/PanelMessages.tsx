@@ -1,23 +1,7 @@
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  FormEvent,
-  useEffect,
-  useRef,
-  useState
-} from 'react'
-import { shallowEqual } from 'react-redux'
-import { mockMessages } from '__mocks__/rooms'
 import isPropValid from '@emotion/is-prop-valid'
 
-import { selectCurrentRoomId } from 'store/client'
 import {
-  selectUser,
-  useCreateMessageMutation,
-  useGetRoomMessagesQuery
-} from 'store/server'
-
-import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -27,71 +11,79 @@ import {
   Typography
 } from '@mui/material'
 
-import { useAppSelector } from 'hooks/useRedux'
+import { useRoomMessages } from 'hooks/useRoomMessages'
 
-const StyledCard = styled(Card, { shouldForwardProp: isPropValid })<{
+import { getUserInitials } from 'utils'
+
+const StyledMessage = styled(Box, { shouldForwardProp: isPropValid })<{
   isOwnMessage: boolean
 }>(({ theme, isOwnMessage }) => ({
   maxWidth: '300px',
-  padding: theme.spacing(2),
+  display: 'flex',
+  alignItems: 'flex-end',
   marginBottom: theme.spacing(3),
+
   ...(isOwnMessage
     ? {
         float: 'right',
-        color: 'white',
         clear: 'both',
-        borderBottomRightRadius: 0,
-        backgroundColor: theme.palette.primary.main
+        '> .message': {
+          color: 'white',
+          borderBottomRightRadius: 0,
+          backgroundColor: theme.palette.primary.main
+        }
       }
     : {
+        clear: 'both',
         float: 'left',
-        borderBottomLeftRadius: 0,
-        backgroundColor: theme.palette.secondary.main,
-        clear: 'both'
-      })
+        '> .message': {
+          borderBottomLeftRadius: 0,
+          backgroundColor: theme.palette.secondary.main
+        }
+      }),
+
+  '.message': {
+    padding: `${theme.spacing(1)} ${theme.spacing(2)}`
+  },
+  '.avatar': {
+    width: 24,
+    height: 24,
+    fontSize: 12,
+    fontWeight: 600,
+    ...(isOwnMessage
+      ? {
+          marginLeft: theme.spacing(1)
+        }
+      : {
+          order: -1,
+          marginRight: theme.spacing(1)
+        })
+  }
 }))
 
 export const PanelMessages = () => {
-  const currentUser = useAppSelector(selectUser, shallowEqual)
-  const currentRoomId = useAppSelector(selectCurrentRoomId)
-  const { data: messages = [] } = useGetRoomMessagesQuery(currentRoomId, {
-    skip: !currentRoomId
-  })
-
-  const messagesRef = useRef<HTMLDivElement | null>(null)
-  const [userMessage, setUserMessage] = useState('')
-  const [createMessage] = useCreateMessageMutation()
-
-  const handleSubmitMessage = async (e: FormEvent) => {
-    e.preventDefault()
-
-    if (userMessage && currentRoomId) {
-      await createMessage({ message: userMessage, roomId: currentRoomId })
-      setUserMessage('')
-    }
-  }
-
-  const handleInputMessage = (event: ChangeEvent<HTMLInputElement>) => {
-    setUserMessage(event.target.value)
-  }
-
-  useEffect(() => {
-    if (messagesRef.current) {
-      messagesRef.current.scrollTop = messagesRef.current.scrollHeight
-    }
-  }, [messages])
+  const {
+    messages,
+    messagesRef,
+    userMessage,
+    currentUser,
+    currentRoomId,
+    handleInputMessage,
+    handleSubmitMessage
+  } = useRoomMessages()
 
   return currentRoomId ? (
     <Box flexGrow={1} display="flex" flexDirection="column">
       <Box overflow="auto" p={2} height="100%" ref={messagesRef}>
         {messages.length ? (
-          messages.map(({ id, message, userId, createdAt }) => {
+          messages.map(({ id, user, message, userId, createdAt }) => {
             const isOwnMessage = userId === currentUser.id
 
             return (
-              <StyledCard key={`message-${id}`} isOwnMessage={isOwnMessage}>
-                {message}
-              </StyledCard>
+              <StyledMessage key={`message-${id}`} isOwnMessage={isOwnMessage}>
+                <Card className="message">{message}</Card>
+                <Avatar className="avatar">{getUserInitials(user)}</Avatar>
+              </StyledMessage>
             )
           })
         ) : (
@@ -102,6 +94,7 @@ export const PanelMessages = () => {
       <Box p={4} display="flex" component="form" onSubmit={handleSubmitMessage}>
         <TextField
           fullWidth
+          autoComplete="off"
           onChange={handleInputMessage}
           value={userMessage}
         />

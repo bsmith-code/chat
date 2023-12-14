@@ -15,25 +15,20 @@ import {
   useForm,
   UseFormReturn
 } from 'react-hook-form'
-import { shallowEqual } from 'react-redux'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { selectCurrentRoomId } from 'store/client'
-import {
-  selectUser,
-  useGetRoomsQuery,
-  useUpdateRoomMutation
-} from 'store/server'
+import { updateCurrentRoomId } from 'store/client'
+import { useUpdateRoomMutation } from 'store/server'
 
-import { useAppSelector } from 'hooks/useRedux'
+import { useCurrentRoom } from 'hooks/useCurrentRoom'
+import { useAppDispatch } from 'hooks/useRedux'
 
 import { roomSchema } from 'utils'
 
-import { IRoom, IRoomForm, IUser } from 'types/room'
+import { IRoom, IRoomForm } from 'types/room'
 
 export interface IPanelDetailsContext {
   form: UseFormReturn<IRoomForm>
-  currentUser: IUser
   currentRoom?: IRoom
   focusedField: string
   handleSubmit: (e: BaseSyntheticEvent) => Promise<void>
@@ -48,17 +43,11 @@ interface IProps {
   children: ReactNode
 }
 export const PanelDetailsContextProvider = ({ children }: IProps) => {
-  const currentUser = useAppSelector(selectUser, shallowEqual)
-  const currentRoomId = useAppSelector(selectCurrentRoomId)
+  const dispatch = useAppDispatch()
 
-  const [updateRoom] = useUpdateRoomMutation()
-  const { currentRoom } = useGetRoomsQuery(currentUser.id, {
-    skip: !currentRoomId || !currentUser.id,
-    selectFromResult: ({ data = [], ...restResult }) => ({
-      currentRoom: data.find(({ id }) => id === currentRoomId),
-      ...restResult
-    })
-  })
+  const { currentRoom, currentRoomId } = useCurrentRoom()
+
+  const [updateRoom, { isError }] = useUpdateRoomMutation()
 
   const [focusedField, setFocusedField] = useState('')
 
@@ -76,15 +65,18 @@ export const PanelDetailsContextProvider = ({ children }: IProps) => {
   })
 
   useEffect(() => {
-    if (currentRoom && currentRoomId) {
+    if (!currentRoom) {
+      dispatch(updateCurrentRoomId(''))
+    }
+
+    if ((currentRoom && currentRoomId) || isError) {
       handleResetForm()
     }
-  }, [currentRoom, currentRoomId])
+  }, [currentRoom, currentRoomId, isError])
 
   const context = useMemo(
     () => ({
       form,
-      currentUser,
       currentRoom,
       focusedField,
       membersField,
@@ -94,7 +86,6 @@ export const PanelDetailsContextProvider = ({ children }: IProps) => {
     }),
     [
       form,
-      currentUser,
       currentRoom,
       focusedField,
       membersField,
