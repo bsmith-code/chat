@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
 import { appSlice } from 'store/client'
+import { listenerMiddleware } from 'store/middleware'
 import { authApi, chatApi } from 'store/server'
 
 export const combinedReducers = combineReducers({
@@ -13,7 +14,9 @@ const store = configureStore({
   reducer: combinedReducers,
   devTools: process.env.NODE_ENV !== 'production',
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(authApi.middleware, chatApi.middleware)
+    getDefaultMiddleware()
+      .prepend(listenerMiddleware.middleware)
+      .concat(authApi.middleware, chatApi.middleware)
 })
 
 export default store

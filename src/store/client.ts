@@ -1,12 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import uniqid from 'uniqid'
 
 import { IRootState } from 'types/redux'
 
 interface IAppState {
   currentRoomId: string
+  notifications: Record<string, string>
 }
+
 const initialState: IAppState = {
-  currentRoomId: ''
+  currentRoomId: '',
+  notifications: {}
 }
 
 const reducers = {
@@ -15,6 +19,20 @@ const reducers = {
     { payload }: PayloadAction<string>
   ) => {
     state.currentRoomId = payload
+  },
+  createNotification: (
+    state: IAppState,
+    { payload }: PayloadAction<string>
+  ) => {
+    state.notifications = {
+      [uniqid()]: payload ?? ''
+    }
+  },
+  removeNotification: (
+    state: IAppState,
+    { payload }: PayloadAction<string>
+  ) => {
+    delete state.notifications[payload]
   }
 }
 
@@ -25,8 +43,11 @@ export const appSlice = createSlice({
 })
 
 export const {
-  actions: { updateCurrentRoomId }
+  actions: { updateCurrentRoomId, createNotification, removeNotification }
 } = appSlice
 
 export const selectCurrentRoomId = (state: IRootState) =>
   state?.app?.currentRoomId ?? ''
+
+export const selectNotifications = (state: IRootState) =>
+  state?.app?.notifications ?? []
