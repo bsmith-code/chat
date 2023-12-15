@@ -14,12 +14,9 @@ export const useRoomMessages = () => {
   const currentUser = useAppSelector(selectUser, shallowEqual)
   const currentRoomId = useAppSelector(selectCurrentRoomId)
 
-  const { data: messages = [] } = useGetRoomMessagesQuery(
-    { roomId: currentRoomId, userId: currentUser.id },
-    {
-      skip: !currentRoomId
-    }
-  )
+  const { data: messages = [] } = useGetRoomMessagesQuery(currentRoomId, {
+    skip: !currentRoomId
+  })
 
   const messagesRef = useRef<HTMLDivElement | null>(null)
   const [userMessage, setUserMessage] = useState('')

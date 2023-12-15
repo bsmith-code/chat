@@ -78,20 +78,20 @@ export const chatApi = createApi({
   endpoints: build => ({
     getRooms: build.query<IRoom[], string>({
       query: () => 'rooms',
-      async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded }) {
+      async onCacheEntryAdded(userId, { updateCachedData, cacheDataLoaded }) {
         if (!socket) return
         try {
           await cacheDataLoaded
 
-          const createListener = (room: IRoom) => {
-            if (!room.members.find(({ id }) => id === arg)) return
+          const createRoomListener = (room: IRoom) => {
+            if (!room.members.find(({ id }) => id === userId)) return
 
             updateCachedData(draft => [room, ...draft])
           }
 
           const updateRoomListener = (room: IRoom) => {
             updateCachedData(draft => {
-              const isMember = room.members.find(({ id }) => id === arg)
+              const isMember = room.members.find(({ id }) => id === userId)
               if (!isMember) {
                 const roomIndex = draft.findIndex(({ id }) => id === room.id)
                 return [
@@ -112,20 +112,21 @@ export const chatApi = createApi({
 
           const createMessageListener = (message: IMessage) => {
             updateCachedData(draft => {
-              const draftRoom =
-                draft.find(({ id }) => id === message.roomId) ?? {}
+              const draftRoom = draft.find(({ id }) => id === message.roomId)
 
               if (draftRoom) {
                 Object.assign(draftRoom, {
                   message
                 })
+
+                showNotification(message).catch(e => e as Error)
               }
             })
           }
 
-          socket.on('createMessage', createMessageListener)
-          socket.on('createRoom', createListener)
+          socket.on('createRoom', createRoomListener)
           socket.on('updateRoom', updateRoomListener)
+          socket.on('createMessage', createMessageListener)
         } catch (error) {
           console.error(error)
         }
@@ -145,30 +146,20 @@ export const chatApi = createApi({
         body
       })
     }),
-    getRoomMessages: build.query<
-      IMessage[],
-      { roomId: string; userId: string }
-    >({
-      query: ({ roomId }) => `rooms/${roomId}/messages`,
-      async onCacheEntryAdded(
-        { roomId, userId },
-        { updateCachedData, cacheDataLoaded }
-      ) {
+    getRoomMessages: build.query<IMessage[], string>({
+      query: id => `rooms/${id}/messages`,
+      async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded }) {
         if (!socket) return
 
         try {
           await cacheDataLoaded
 
-          const listener = async (message: IMessage) => {
-            if (message.roomId !== roomId) return
+          const listener = (message: IMessage) => {
+            if (message.roomId !== arg) return
 
             updateCachedData(draft => {
               draft.push(message)
             })
-
-            if (message.userId !== userId) {
-              await showNotification(message)
-            }
           }
 
           socket.on('createMessage', listener)

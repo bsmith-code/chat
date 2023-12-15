@@ -27,13 +27,21 @@ const createNotification = (title: string, body: string) =>
   new Notification(title, { body })
 
 export const showNotification = async (message: IMessage) => {
+  if (!('Notification' in window)) {
+    console.error('This browser does not support notifications.')
+    return
+  }
+  const {
+    user: { firstName }
+  } = message
+
   if (Notification.permission === 'granted') {
-    createNotification('New Message', 'You have a new message')
+    createNotification(`New message from ${firstName}`, message.message)
   } else if (Notification.permission !== 'denied') {
     const permission = await Notification.requestPermission()
 
     if (permission === 'granted') {
-      createNotification('New Message', 'You have a new message')
+      createNotification(`New message from ${firstName}`, message.message)
     }
   }
 }
