@@ -38,7 +38,7 @@ const StyledMessage = styled(Box, { shouldForwardProp: isPropValid })<{
         float: 'left',
         '> .message': {
           borderBottomLeftRadius: 0,
-          backgroundColor: theme.palette.secondary.main
+          backgroundColor: theme.palette.action.selected
         }
       }),
 
