@@ -30,7 +30,7 @@ export const ListRoomItem = ({ room }: IProps) => {
     <>
       <ListItemButton
         onClick={handleClickRoom}
-        sx={{ bgcolor: isCurrentRoom ? 'grey.200' : '' }}
+        sx={{ bgcolor: isCurrentRoom ? 'action.selected' : '' }}
       >
         <AvatarGroup max={2} total={preparedMembers.length}>
           {preparedMembers.map(member => (

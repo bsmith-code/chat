@@ -29,7 +29,7 @@ export const AppErrorBoundary = ({ error, resetErrorBoundary }: IProps) => {
   const { name, message, stack } = error ?? {}
 
   useEffect(() => {
-    if (error) {
+    if (error && process.env.NODE_ENV === 'production') {
       emailError({
         name,
         stack,
