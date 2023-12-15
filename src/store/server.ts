@@ -119,7 +119,9 @@ export const chatApi = createApi({
                   message
                 })
 
-                showNotification(message).catch(e => e as Error)
+                if (message.userId !== userId) {
+                  showNotification(message).catch(e => e as Error)
+                }
               }
             })
           }
