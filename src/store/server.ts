@@ -2,6 +2,8 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import io, { Socket } from 'socket.io-client'
 
+import { showNotification } from 'utils'
+
 import { IRootState, TAppListenerAPI } from 'types/redux'
 import { IMessage, IMessageCreate, IRoom, IRoomForm, IUser } from 'types/room'
 
@@ -143,20 +145,30 @@ export const chatApi = createApi({
         body
       })
     }),
-    getRoomMessages: build.query<IMessage[], string>({
-      query: id => `rooms/${id}/messages`,
-      async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded }) {
+    getRoomMessages: build.query<
+      IMessage[],
+      { roomId: string; userId: string }
+    >({
+      query: ({ roomId }) => `rooms/${roomId}/messages`,
+      async onCacheEntryAdded(
+        { roomId, userId },
+        { updateCachedData, cacheDataLoaded }
+      ) {
         if (!socket) return
 
         try {
           await cacheDataLoaded
 
-          const listener = (message: IMessage) => {
-            if (message.roomId !== arg) return
+          const listener = async (message: IMessage) => {
+            if (message.roomId !== roomId) return
 
             updateCachedData(draft => {
               draft.push(message)
             })
+
+            if (message.userId !== userId) {
+              await showNotification(message)
+            }
           }
 
           socket.on('createMessage', listener)

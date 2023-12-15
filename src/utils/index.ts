@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 
-import { IUser } from 'types/room'
+import { IMessage, IUser } from 'types/room'
 
 export const getUserFullName = ({ firstName, lastName }: IUser) =>
   `${firstName} ${lastName}`
@@ -22,3 +22,18 @@ export const roomSchema = yup.object({
   description: yup.string().default(''),
   members: yup.array(userSchema).min(1, 'Members are required.').required()
 })
+
+const createNotification = (title: string, body: string) =>
+  new Notification(title, { body })
+
+export const showNotification = async (message: IMessage) => {
+  if (Notification.permission === 'granted') {
+    createNotification('New Message', 'You have a new message')
+  } else if (Notification.permission !== 'denied') {
+    const permission = await Notification.requestPermission()
+
+    if (permission === 'granted') {
+      createNotification('New Message', 'You have a new message')
+    }
+  }
+}
