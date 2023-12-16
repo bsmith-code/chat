@@ -25,5 +25,6 @@ export const mockRooms: IRoom[] = Array.from({ length: 20 }).map((_, idx) => ({
   name: `Room ${idx}`,
   description: `Room Description ${idx}`,
   members: mockMembers,
-  message: mockMessages[0]
+  message: mockMessages[0],
+  updatedAt: '2023-12-16T12:36:58.000Z'
 }))
