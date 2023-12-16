@@ -7,7 +7,7 @@ import { selectUser } from 'store/server'
 
 import { useAppDispatch, useAppSelector } from 'hooks/useRedux'
 
-import { getRoomName } from 'utils'
+import { getRoomName, shortenString } from 'utils'
 
 import { IRoom } from 'types/room'
 
@@ -26,8 +26,6 @@ export const useRoomListItem = (room: IRoom) => {
   const isCurrentUser = userId === currentUser.id
   const isCurrentRoom = id === currentRoomId
 
-  const slicedMessage =
-    message && message.length >= 40 ? `${message.slice(0, 40)}...` : message
   const memberName =
     members.find(member => member.id === userId)?.firstName ?? 'Deleted user'
 
@@ -36,9 +34,10 @@ export const useRoomListItem = (room: IRoom) => {
   )
   const preparedRoomName = getRoomName(preparedMembers, name)
 
-  const preparedMessage = isCurrentUser
-    ? `You: ${slicedMessage}`
-    : `${memberName}: ${slicedMessage}`
+  const preparedMessage = shortenString(
+    isCurrentUser ? `You: ${message}` : `${memberName}: ${message}`,
+    30
+  )
 
   const preparedDate = dayjs().isSame(dayjs(createdAt), 'day')
     ? dayjs(createdAt).format('H:mm a')

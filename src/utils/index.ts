@@ -81,3 +81,6 @@ export const getAvatarStyles = (total: number) => ({
     zIndex: 1
   }
 })
+
+export const shortenString = (text: string, count: number) =>
+  text.length >= count ? `${text.slice(0, count)}...` : text

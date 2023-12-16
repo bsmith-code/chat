@@ -70,7 +70,7 @@ export const ListRoomItem = ({ room }: IProps) => {
         </StyledAvatarGroup>
         <ListItemText sx={{ ml: 2 }}>
           <Typography variant="subtitle2">{preparedRoomName}</Typography>
-          <Typography>
+          <Typography fontSize={14}>
             {message ? preparedMessage : 'No new messages'}
           </Typography>
         </ListItemText>
