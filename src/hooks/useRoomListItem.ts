@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { shallowEqual } from 'react-redux'
-import { useIsFirstRender, usePrevious } from '@uidotdev/usehooks'
 import dayjs from 'dayjs'
 
 import { selectCurrentRoomId, updateCurrentRoomId } from 'store/client'
@@ -15,18 +14,14 @@ import { IRoom } from 'types/room'
 export const useRoomListItem = (room: IRoom) => {
   const dispatch = useAppDispatch()
 
-  const isFirstRender = useIsFirstRender()
   const currentUser = useAppSelector(selectUser, shallowEqual)
   const currentRoomId = useAppSelector(selectCurrentRoomId)
 
+  const prevCreatedAt = useRef<number | null>(null)
   const [showNotification, setShowNotification] = useState(false)
 
-  const {
-    id,
-    name,
-    members,
-    message: { message, userId, roomId, createdAt }
-  } = room
+  const { id, name, members, message: roomMessage } = room ?? {}
+  const { message, userId, createdAt } = roomMessage ?? {}
 
   const isCurrentUser = userId === currentUser.id
   const isCurrentRoom = id === currentRoomId
@@ -50,23 +45,24 @@ export const useRoomListItem = (room: IRoom) => {
     : dayjs(createdAt).format('MM/DD/YYYY')
 
   const handleClickRoom = () => {
+    prevCreatedAt.current = null
     setShowNotification(false)
     dispatch(updateCurrentRoomId(id))
   }
 
-  const nextCreatedAt = dayjs(createdAt).unix()
-  const prevCreatedAt = usePrevious(dayjs(createdAt).unix())
+  const nextCreatedAt = createdAt ? dayjs(createdAt).unix() : 0
+
   useEffect(() => {
-    console.log('nextCreatedAt', nextCreatedAt)
-    console.log('prevCreatedAt', prevCreatedAt)
     if (
-      !isFirstRender &&
-      roomId !== currentRoomId &&
-      prevCreatedAt !== nextCreatedAt
+      !isCurrentRoom &&
+      prevCreatedAt.current &&
+      prevCreatedAt.current !== nextCreatedAt
     ) {
       setShowNotification(true)
     }
-  }, [roomId, currentRoomId, nextCreatedAt, prevCreatedAt, isFirstRender])
+
+    prevCreatedAt.current = nextCreatedAt
+  }, [isCurrentRoom, nextCreatedAt, prevCreatedAt])
 
   return {
     message,
