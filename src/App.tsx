@@ -3,7 +3,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { shallowEqual } from 'react-redux'
 import { LayoutDefault } from 'layouts/LayoutDefault'
 
-import { selectCurrentRoomId, selectMuiTheme } from 'store/client'
+import { selectMuiTheme } from 'store/client'
 import { useSessionQuery } from 'store/server'
 
 import { Typography } from '@mui/material'
@@ -14,9 +14,7 @@ import { useAppNotifications } from 'hooks/useAppNotifications'
 import { useAppSelector } from 'hooks/useRedux'
 
 import { AppErrorBoundary } from 'components/AppErrorBoundary'
-import { PanelDetails } from 'components/PanelDetails'
-import { PanelMessages } from 'components/PanelMessages'
-import { PanelRooms } from 'components/PanelRooms'
+import { ViewHome } from 'views/ViewHome'
 
 const redirectUrl = encodeURI(
   `${process.env.REACT_APP_AUTH_BASE_URL ?? ''}?redirectUrl=${
@@ -28,7 +26,6 @@ export const App = () => {
   const { data: user, isFetching } = useSessionQuery()
 
   const currentTheme = useAppSelector(selectMuiTheme, shallowEqual)
-  const currentRoomId = useAppSelector(selectCurrentRoomId)
 
   useEffect(() => {
     if (!isFetching && !user) {
@@ -43,11 +40,7 @@ export const App = () => {
         <ErrorBoundary FallbackComponent={AppErrorBoundary}>
           <LayoutDefault>
             {user ? (
-              <>
-                <PanelRooms />
-                <PanelMessages />
-                {currentRoomId && <PanelDetails />}
-              </>
+              <ViewHome />
             ) : (
               <Typography>
                 {isFetching ? 'Loading...' : 'Please login to continue'}

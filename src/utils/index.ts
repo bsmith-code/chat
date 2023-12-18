@@ -2,6 +2,9 @@ import * as yup from 'yup'
 
 import { IMessage, IUser } from 'types/room'
 
+export const shortenString = (text: string, count: number) =>
+  text.length >= count ? `${text.slice(0, count)}...` : text
+
 export const getUserFullName = ({ firstName, lastName }: IUser) =>
   `${firstName} ${lastName}`
 
@@ -10,8 +13,7 @@ export const getUserInitials = ({ firstName, lastName }: IUser) =>
 
 export const getRoomName = (members: IUser[], name?: string) => {
   const roomName = name || members.map(({ firstName }) => firstName).join(', ')
-  const preparedRoomName =
-    roomName.length > 30 ? `${roomName.slice(0, 30)}...` : roomName
+  const preparedRoomName = shortenString(roomName, 30)
 
   return preparedRoomName
 }
@@ -81,6 +83,3 @@ export const getAvatarStyles = (total: number) => ({
     zIndex: 1
   }
 })
-
-export const shortenString = (text: string, count: number) =>
-  text.length >= count ? `${text.slice(0, count)}...` : text

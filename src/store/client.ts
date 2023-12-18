@@ -7,22 +7,27 @@ import {
 } from 'themes'
 import uniqid from 'uniqid'
 
+import { TAB_ROOMS } from 'constants/tabs'
 import {
   THEME_DARK_VALUE,
   THEME_LIGHT_VALUE,
   THEME_SYSTEM_VALUE
 } from 'constants/theme'
 
-import { IAppState, TTheme } from 'types/app'
+import { IAppState, TTab, TTheme } from 'types/app'
 import { IRootState } from 'types/redux'
 
 const initialState: IAppState = {
   theme: getStoredTheme() ?? 'system',
+  currentTab: 'rooms',
   currentRoomId: '',
   notifications: {}
 }
 
 const reducers = {
+  updateCurrentTab: (state: IAppState, { payload }: PayloadAction<TTab>) => {
+    state.currentTab = payload
+  },
   updateTheme: (state: IAppState, { payload }: PayloadAction<TTheme>) => {
     state.theme = payload
   },
@@ -56,12 +61,16 @@ export const appSlice = createSlice({
 
 export const {
   actions: {
-    updateCurrentRoomId,
+    updateTheme,
+    updateCurrentTab,
     createNotification,
     removeNotification,
-    updateTheme
+    updateCurrentRoomId
   }
 } = appSlice
+
+export const selectCurrentTab = (state: IRootState) =>
+  state?.app?.currentTab ?? TAB_ROOMS
 
 export const selectCurrentRoomId = (state: IRootState) =>
   state?.app?.currentRoomId ?? ''

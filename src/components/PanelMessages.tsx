@@ -13,6 +13,8 @@ import {
 
 import { useRoomMessages } from 'hooks/useRoomMessages'
 
+import { PanelMessagesToolbar } from 'components/PanelMessagesToolbar'
+
 import { getUserInitials } from 'utils'
 
 const StyledMessage = styled(Box, { shouldForwardProp: isPropValid })<{
@@ -73,7 +75,13 @@ export const PanelMessages = () => {
   } = useRoomMessages()
 
   return currentRoomId ? (
-    <Box flexGrow={1} display="flex" flexDirection="column">
+    <Box
+      flexGrow={1}
+      display="flex"
+      className="messages"
+      flexDirection="column"
+    >
+      <PanelMessagesToolbar />
       <Box overflow="auto" p={2} height="100%" ref={messagesRef}>
         {messages.length ? (
           messages.map(({ id, user, message, userId, createdAt }) => {
@@ -111,8 +119,9 @@ export const PanelMessages = () => {
     <Box
       flexGrow={1}
       display="flex"
-      flexDirection="column"
       alignItems="center"
+      className="messages"
+      flexDirection="column"
       justifyContent="center"
     >
       <Typography>Select a room to start chatting!</Typography>

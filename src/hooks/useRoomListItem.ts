@@ -2,12 +2,18 @@ import { useEffect, useRef, useState } from 'react'
 import { shallowEqual } from 'react-redux'
 import dayjs from 'dayjs'
 
-import { selectCurrentRoomId, updateCurrentRoomId } from 'store/client'
+import {
+  selectCurrentRoomId,
+  updateCurrentRoomId,
+  updateCurrentTab
+} from 'store/client'
 import { selectUser } from 'store/server'
 
 import { useAppDispatch, useAppSelector } from 'hooks/useRedux'
 
 import { getRoomName, shortenString } from 'utils'
+
+import { TAB_MESSAGES } from 'constants/tabs'
 
 import { IRoom } from 'types/room'
 
@@ -34,10 +40,12 @@ export const useRoomListItem = (room: IRoom) => {
   )
   const preparedRoomName = getRoomName(preparedMembers, name)
 
-  const preparedMessage = shortenString(
-    isCurrentUser ? `You: ${message}` : `${memberName}: ${message}`,
-    30
-  )
+  const preparedMessage = message
+    ? shortenString(
+        isCurrentUser ? `You: ${message}` : `${memberName}: ${message}`,
+        30
+      )
+    : 'No new messages'
 
   const preparedDate = dayjs().isSame(dayjs(createdAt), 'day')
     ? dayjs(createdAt).format('H:mm a')
@@ -46,6 +54,7 @@ export const useRoomListItem = (room: IRoom) => {
   const handleClickRoom = () => {
     prevCreatedAt.current = null
     setShowNotification(false)
+    dispatch(updateCurrentTab(TAB_MESSAGES))
     dispatch(updateCurrentRoomId(id))
   }
 
@@ -64,7 +73,6 @@ export const useRoomListItem = (room: IRoom) => {
   }, [isCurrentRoom, nextCreatedAt, prevCreatedAt])
 
   return {
-    message,
     preparedDate,
     isCurrentRoom,
     handleClickRoom,

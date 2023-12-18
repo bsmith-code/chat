@@ -41,7 +41,6 @@ const StyledAvatarGroup = styled(AvatarGroup)(({ total = 0 }) => ({
 
 export const ListRoomItem = ({ room }: IProps) => {
   const {
-    message,
     preparedDate,
     isCurrentRoom,
     handleClickRoom,
@@ -70,9 +69,7 @@ export const ListRoomItem = ({ room }: IProps) => {
         </StyledAvatarGroup>
         <ListItemText sx={{ ml: 2 }}>
           <Typography variant="subtitle2">{preparedRoomName}</Typography>
-          <Typography fontSize={14}>
-            {message ? preparedMessage : 'No new messages'}
-          </Typography>
+          <Typography fontSize={14}>{preparedMessage}</Typography>
         </ListItemText>
         <Box alignSelf="flex-start" mt={1} textAlign="center" flexBasis="54px">
           <Typography fontSize={10}>{preparedDate}</Typography>

@@ -10,7 +10,7 @@ interface IProps {
 export const LayoutDefault = ({ children }: IProps) => (
   <>
     <LayoutAppHeader />
-    <Box display="flex" width="100%" height="calc(100vh - 64px)">
+    <Box width="100%" height="calc(100vh - 64px)">
       {children}
     </Box>
   </>
