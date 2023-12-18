@@ -14,6 +14,9 @@ import { PanelRooms } from 'components/PanelRooms'
 const StyledViewHome = styled(Box, { shouldForwardProp: isPropValid })<{
   currentTab: 'rooms' | 'messages' | 'details'
 }>(({ currentTab }) => ({
+  flexGrow: 1,
+  display: 'flex',
+  overflow: 'hidden',
   '.rooms, .messages, .details': {
     '.toolbar': {
       display: 'none'
@@ -39,7 +42,7 @@ export const ViewHome = () => {
   const currentRoomId = useAppSelector(selectCurrentRoomId)
 
   return (
-    <StyledViewHome height="100%" display="flex" currentTab={currentTab}>
+    <StyledViewHome currentTab={currentTab}>
       <PanelRooms />
       <PanelMessages />
       {currentRoomId && <PanelDetails />}

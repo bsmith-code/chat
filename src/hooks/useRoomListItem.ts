@@ -48,7 +48,7 @@ export const useRoomListItem = (room: IRoom) => {
     : 'No new messages'
 
   const preparedDate = dayjs().isSame(dayjs(createdAt), 'day')
-    ? dayjs(createdAt).format('H:mm a')
+    ? dayjs(createdAt).format('h:mm a')
     : dayjs(createdAt).format('MM/DD/YYYY')
 
   const handleClickRoom = () => {

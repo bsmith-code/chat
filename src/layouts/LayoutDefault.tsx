@@ -8,10 +8,8 @@ interface IProps {
   children: ReactNode
 }
 export const LayoutDefault = ({ children }: IProps) => (
-  <>
+  <Box width="100%" height="100dvh" display="flex" flexDirection="column">
     <LayoutAppHeader />
-    <Box width="100%" height="calc(100vh - 64px)">
-      {children}
-    </Box>
-  </>
+    {children}
+  </Box>
 )
