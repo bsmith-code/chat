@@ -84,6 +84,6 @@ export const getAvatarStyles = (total: number) => ({
   }
 })
 
-export const commandMap = {
-  '/hiac': ''
+export const commandMap: Record<string, string> = {
+  '/hiac': 'crab.gif'
 }

@@ -64,17 +64,12 @@ export const PanelMessages = () => {
     <Box
       flexGrow={1}
       display="flex"
+      position="relative"
       className="messages"
       flexDirection="column"
     >
       <PanelMessagesToolbar />
-      <Box
-        p={2}
-        height="100%"
-        overflow="auto"
-        ref={messagesRef}
-        position="relative"
-      >
+      <Box p={2} height="100%" overflow="auto" ref={messagesRef}>
         {messages.length ? (
           messages.map(({ id, user, message, userId, createdAt }) => {
             const isOwnMessage = userId === currentUser.id
@@ -89,10 +84,10 @@ export const PanelMessages = () => {
         ) : (
           <Typography>No messages.</Typography>
         )}
-        <PanelMessagesCommands />
       </Box>
       <Divider />
       <PanelMessagesCreate />
+      <PanelMessagesCommands />
     </Box>
   ) : (
     <Box

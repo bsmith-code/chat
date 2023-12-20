@@ -27,7 +27,11 @@ const initialState: IAppState = {
 
 const reducers = {
   updateCommands: (state: IAppState, { payload }: PayloadAction<string>) => {
-    state.commands.push(payload)
+    if (state.commands.includes(payload)) {
+      state.commands.splice(state.commands.indexOf(payload), 1)
+    } else {
+      state.commands.push(payload)
+    }
   },
   updateCurrentTab: (state: IAppState, { payload }: PayloadAction<TTab>) => {
     state.currentTab = payload
