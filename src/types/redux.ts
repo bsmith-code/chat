@@ -1,6 +1,6 @@
 import { ListenerEffectAPI, TypedStartListening } from '@reduxjs/toolkit'
 
-import store, { combinedReducers } from 'store'
+import { combinedReducers, store } from 'store'
 
 export type TAppDispatch = typeof store.dispatch
 export type IRootState = ReturnType<typeof combinedReducers>

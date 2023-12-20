@@ -7,6 +7,8 @@ import { showNotification } from 'utils'
 import { IRootState, TAppListenerAPI } from 'types/redux'
 import { IMessage, IMessageCreate, IRoom, IRoomForm, IUser } from 'types/room'
 
+import { updateCommands } from './client'
+
 const baseUrl = process.env.REACT_APP_API_BASE_URL ?? ''
 let socket: Socket | undefined
 

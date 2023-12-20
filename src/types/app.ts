@@ -14,6 +14,7 @@ export type TTab = typeof TAB_ROOMS | typeof TAB_MESSAGES | typeof TAB_DETAILS
 export interface IAppState {
   theme: TTheme
   currentTab: TTab
+  commands: string[]
   currentRoomId: string
   notifications: Record<string, string>
 }

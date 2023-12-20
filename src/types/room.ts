@@ -11,12 +11,14 @@ export interface IMessage {
   roomId: string
   userId: string
   user: IUser
+  isCommand: boolean
   createdAt: string
 }
 
 export interface IMessageCreate {
   message: string
   roomId: string
+  isCommand: boolean
 }
 
 export interface IRoom {

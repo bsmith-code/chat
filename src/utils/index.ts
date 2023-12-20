@@ -83,3 +83,7 @@ export const getAvatarStyles = (total: number) => ({
     zIndex: 1
   }
 })
+
+export const commandMap = {
+  '/hiac': ''
+}

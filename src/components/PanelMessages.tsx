@@ -1,18 +1,11 @@
 import isPropValid from '@emotion/is-prop-valid'
 
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  Divider,
-  styled,
-  TextField,
-  Typography
-} from '@mui/material'
+import { Avatar, Box, Card, Divider, styled, Typography } from '@mui/material'
 
 import { useRoomMessages } from 'hooks/useRoomMessages'
 
+import { PanelMessagesCommands } from 'components/PanelMessagesCommands'
+import { PanelMessagesCreate } from 'components/PanelMessagesCreate'
 import { PanelMessagesToolbar } from 'components/PanelMessagesToolbar'
 
 import { getUserInitials } from 'utils'
@@ -64,15 +57,8 @@ const StyledMessage = styled(Box, { shouldForwardProp: isPropValid })<{
 }))
 
 export const PanelMessages = () => {
-  const {
-    messages,
-    messagesRef,
-    userMessage,
-    currentUser,
-    currentRoomId,
-    handleInputMessage,
-    handleSubmitMessage
-  } = useRoomMessages()
+  const { messages, messagesRef, currentUser, currentRoomId } =
+    useRoomMessages()
 
   return currentRoomId ? (
     <Box
@@ -82,7 +68,13 @@ export const PanelMessages = () => {
       flexDirection="column"
     >
       <PanelMessagesToolbar />
-      <Box overflow="auto" p={2} height="100%" ref={messagesRef}>
+      <Box
+        p={2}
+        height="100%"
+        overflow="auto"
+        ref={messagesRef}
+        position="relative"
+      >
         {messages.length ? (
           messages.map(({ id, user, message, userId, createdAt }) => {
             const isOwnMessage = userId === currentUser.id
@@ -97,23 +89,10 @@ export const PanelMessages = () => {
         ) : (
           <Typography>No messages.</Typography>
         )}
+        <PanelMessagesCommands />
       </Box>
       <Divider />
-      <Box p={4} display="flex" component="form" onSubmit={handleSubmitMessage}>
-        <TextField
-          fullWidth
-          autoComplete="off"
-          onChange={handleInputMessage}
-          value={userMessage}
-        />
-        <Button
-          variant="contained"
-          type="submit"
-          sx={{ flexShrink: 0, ml: 2, color: '#fff' }}
-        >
-          Submit
-        </Button>
-      </Box>
+      <PanelMessagesCreate />
     </Box>
   ) : (
     <Box

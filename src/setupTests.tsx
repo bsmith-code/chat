@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { createSerializer } from '@emotion/jest'
 import { render } from '@testing-library/react'
 
-import store from 'store/index'
+import { store } from 'store/index'
 import { authApi, chatApi } from 'store/server'
 
 import '@testing-library/jest-dom'
