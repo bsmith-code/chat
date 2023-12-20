@@ -18,13 +18,21 @@ import { IAppState, TTab, TTheme } from 'types/app'
 import { IRootState } from 'types/redux'
 
 const initialState: IAppState = {
-  theme: getStoredTheme() ?? 'system',
-  currentTab: 'rooms',
+  commands: [],
+  notifications: {},
   currentRoomId: '',
-  notifications: {}
+  currentTab: 'rooms',
+  theme: getStoredTheme() ?? 'system'
 }
 
 const reducers = {
+  updateCommands: (state: IAppState, { payload }: PayloadAction<string>) => {
+    if (state.commands.includes(payload)) {
+      state.commands.splice(state.commands.indexOf(payload), 1)
+    } else {
+      state.commands.push(payload)
+    }
+  },
   updateCurrentTab: (state: IAppState, { payload }: PayloadAction<TTab>) => {
     state.currentTab = payload
   },
@@ -61,6 +69,7 @@ export const appSlice = createSlice({
 
 export const {
   actions: {
+    updateCommands,
     updateTheme,
     updateCurrentTab,
     createNotification,
@@ -68,6 +77,8 @@ export const {
     updateCurrentRoomId
   }
 } = appSlice
+
+export const selectCommands = (state: IRootState) => state?.app?.commands ?? []
 
 export const selectCurrentTab = (state: IRootState) =>
   state?.app?.currentTab ?? TAB_ROOMS

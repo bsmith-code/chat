@@ -7,7 +7,8 @@ export const mockMessages: IMessage[] = Array.from({ length: 20 }).map(
     userId: idx % 2 === 0 ? `user-1` : `user-2`,
     roomId: idx % 2 === 0 ? `room-1` : `room-2`,
     createdAt: '2021-08-18T18:04:46.766Z',
-    user: {} as IUser
+    user: {} as IUser,
+    isCommand: false
   })
 )
 

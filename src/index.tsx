@@ -5,7 +5,7 @@ import { App } from 'App'
 import { SnackbarProvider } from 'notistack'
 import reportWebVitals from 'reportWebVitals'
 
-import store from 'store'
+import { store } from 'store'
 
 import { Grow } from '@mui/material'
 

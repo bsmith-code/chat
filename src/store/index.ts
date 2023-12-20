@@ -10,7 +10,7 @@ export const combinedReducers = combineReducers({
   [chatApi.reducerPath]: chatApi.reducer
 })
 
-const store = configureStore({
+export const store = configureStore({
   reducer: combinedReducers,
   devTools: process.env.NODE_ENV !== 'production',
   middleware: getDefaultMiddleware =>
@@ -18,5 +18,3 @@ const store = configureStore({
       .prepend(listenerMiddleware.middleware)
       .concat(authApi.middleware, chatApi.middleware)
 })
-
-export default store

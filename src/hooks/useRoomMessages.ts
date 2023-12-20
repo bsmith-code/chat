@@ -10,12 +10,18 @@ import {
 
 import { useAppSelector } from 'hooks/useRedux'
 
+import { commandMap } from 'utils'
+
 export const useRoomMessages = () => {
   const currentUser = useAppSelector(selectUser, shallowEqual)
   const currentRoomId = useAppSelector(selectCurrentRoomId)
 
-  const { data: messages = [] } = useGetRoomMessagesQuery(currentRoomId, {
-    skip: !currentRoomId
+  const { messages } = useGetRoomMessagesQuery(currentRoomId, {
+    skip: !currentRoomId,
+    selectFromResult: ({ data = [], ...restResult }) => ({
+      messages: data.filter(({ isCommand }) => !isCommand),
+      ...restResult
+    })
   })
 
   const messagesRef = useRef<HTMLDivElement | null>(null)
@@ -26,7 +32,13 @@ export const useRoomMessages = () => {
     e.preventDefault()
 
     if (userMessage && currentRoomId) {
-      await createMessage({ message: userMessage, roomId: currentRoomId })
+      const isCommand = Object.keys(commandMap).includes(userMessage)
+
+      await createMessage({
+        message: userMessage,
+        roomId: currentRoomId,
+        isCommand
+      })
       setUserMessage('')
     }
   }
